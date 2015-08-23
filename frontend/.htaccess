@@ -1,0 +1,9 @@
+Options -ExecCGI
+RewriteEngine On
+AddDefaultCharset UTF-8
+Options -Indexes
+Options +FollowSymlinks
+DirectoryIndex index.php
+RewriteCond   %{REQUEST_FILENAME}       !-d
+RewriteCond   %{REQUEST_FILENAME}       !-f
+RewriteRule   ^(.*) index.php?%{QUERY_STRING}
