@@ -1,12 +1,12 @@
 <?php
 	call_user_func(function(){
-		switch(DEV_MODE){
-			case DEBUG:
+		switch(\app\conf\APP_DEV_MODE){
+			case \app\conf\DEBUG:
 				$error_reporting = E_ALL | E_STRICT;
 				$error_mode = 'On';
 			break;
 
-			case RELEASE:
+			case \app\conf\RELEASE:
 				$error_reporting = 0;
 				$error_mode = 'Off';
 			break;
@@ -21,7 +21,7 @@
 			ini_set('html_errors','Off');
 
 		ini_set('log_errors','On');
-		ini_set('error_log',APP_PATH . '/com/error.log');
+		ini_set('error_log',\app\conf\APP_PATH . '/com/error.log');
 	});
 
 	call_user_func(function(){
@@ -31,8 +31,8 @@
 
 	call_user_func(function(){
 		$obd = array(
-			BACKEND_PATH,
-			FRONTEND_PATH
+			\app\conf\BACKEND_PATH,
+			\app\conf\FRONTEND_PATH
 		);
 
 		ini_set('open_basedir',implode(':',$obd));

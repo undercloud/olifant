@@ -39,7 +39,7 @@
 
 		public function exec()
 		{
-			if(DEV_MODE == DEBUG){
+			if(\app\conf\APP_DEV_MODE == \app\conf\DEBUG){
 				if(null === $this->controller)
 					throw new \app\AppException('Class controller is not defined');
 

@@ -1,21 +1,21 @@
 <?php
 	namespace app\conf {
-		define('DEBUG'   , 0x000);
-		define('RELEASE' , 0xFFF);
-		define('DEV_MODE', DEBUG); // DEBUG | RELEASE
-		define('NAMESPACE_SEPARATOR', '\\');
-		define('BACKEND_PATH'    , __DIR__);
-		define('FRONTEND_PATH'   , __DIR__ . '/../frontend');
-		define('APP_PATH'        , BACKEND_PATH . '/app');
-		define('ROUTE_PATH'      , BACKEND_PATH . '/route');
-		define('CONTROLLER_PATH' , BACKEND_PATH . '/controller');
-		define('MODEL_PATH'      , BACKEND_PATH . '/model');
-		define('VIEW_PATH'       , BACKEND_PATH . '/view');
-		define('SETUP_PATH'      , BACKEND_PATH . '/setup');
+		define(__NAMESPACE__ . '\DEBUG'   , 0x000);
+		define(__NAMESPACE__ . '\RELEASE' , 0xFFF);
+		define(__NAMESPACE__ . '\APP_DEV_MODE', DEBUG); // DEBUG | RELEASE
+		define(__NAMESPACE__ . '\NAMESPACE_SEPARATOR', '\\');
+		define(__NAMESPACE__ . '\BACKEND_PATH'    , __DIR__);
+		define(__NAMESPACE__ . '\FRONTEND_PATH'   , __DIR__ . '/../frontend');
+		define(__NAMESPACE__ . '\APP_PATH'        , BACKEND_PATH . '/app');
+		define(__NAMESPACE__ . '\ROUTE_PATH'      , BACKEND_PATH . '/route');
+		define(__NAMESPACE__ . '\CONTROLLER_PATH' , BACKEND_PATH . '/controller');
+		define(__NAMESPACE__ . '\MODEL_PATH'      , BACKEND_PATH . '/model');
+		define(__NAMESPACE__ . '\VIEW_PATH'       , BACKEND_PATH . '/view');
+		define(__NAMESPACE__ . '\SETUP_PATH'      , BACKEND_PATH . '/setup');
 	}
 
 	namespace {
-		require_once BACKEND_PATH . '/app/autoload.php';
+		require_once \app\conf\BACKEND_PATH . '/app/autoload.php';
 		spl_autoload_register('\app\Autoload::load');
 
 		$configs = array(
@@ -26,7 +26,7 @@
 		);
 
 		foreach($configs as $conf){
-			require_once SETUP_PATH . DIRECTORY_SEPARATOR . $conf . '.php';
+			require_once \app\conf\SETUP_PATH . DIRECTORY_SEPARATOR . $conf . '.php';
 		}
 
 		\app\Application::run();

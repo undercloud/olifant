@@ -12,7 +12,7 @@
 
 		private function __construct()
 		{
-			$this->storage_path = APP_PATH . '/com/storage.reg';
+			$this->storage_path = \app\conf\APP_PATH . '/com/storage.reg';
 
 			if(is_readable($this->storage_path)){
 				$this->storage = unserialize(file_get_contents($this->storage_path));

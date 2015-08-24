@@ -1,1 +1,21 @@
 [23-Aug-2015 15:45:31 UTC] PHP Warning:  Division by zero in /var/www/olifant/backend/setup/general.php on line 41
+[23-Aug-2015 19:27:35 UTC] PHP Notice:  Use of undefined constant NAMESPACE_SEPARATOR - assumed 'NAMESPACE_SEPARATOR' in /var/www/olifant/backend/app/autoload.php on line 24
+[23-Aug-2015 19:27:35 UTC] PHP Notice:  Use of undefined constant NAMESPACE_SEPARATOR - assumed 'NAMESPACE_SEPARATOR' in /var/www/olifant/backend/app/autoload.php on line 25
+[23-Aug-2015 19:27:35 UTC] PHP Fatal error:  Class 'app\EventListener' not found in /var/www/olifant/backend/setup/events.php on line 2
+[23-Aug-2015 19:53:42 UTC] PHP Notice:  Use of undefined constant APP_DEV_MODE - assumed 'APP_DEV_MODE' in /var/www/olifant/backend/app/frontcontroller.php on line 42
+[23-Aug-2015 19:53:42 UTC] PHP Notice:  Use of undefined constant DEBUG - assumed 'DEBUG' in /var/www/olifant/backend/app/frontcontroller.php on line 42
+[23-Aug-2015 19:54:52 UTC] PHP Notice:  Use of undefined constant APP_DEV_MODE - assumed 'APP_DEV_MODE' in /var/www/olifant/backend/app/frontcontroller.php on line 42
+[23-Aug-2015 19:54:52 UTC] PHP Notice:  Use of undefined constant DEBUG - assumed 'DEBUG' in /var/www/olifant/backend/app/frontcontroller.php on line 42
+[24-Aug-2015 03:38:36 UTC] PHP Notice:  Use of undefined constant APP_DEV_MODE - assumed 'APP_DEV_MODE' in /var/www/olifant/backend/app/frontcontroller.php on line 42
+[24-Aug-2015 03:38:36 UTC] PHP Notice:  Use of undefined constant DEBUG - assumed 'DEBUG' in /var/www/olifant/backend/app/frontcontroller.php on line 42
+[24-Aug-2015 03:38:40 UTC] PHP Notice:  Use of undefined constant APP_DEV_MODE - assumed 'APP_DEV_MODE' in /var/www/olifant/backend/app/frontcontroller.php on line 42
+[24-Aug-2015 03:38:40 UTC] PHP Notice:  Use of undefined constant DEBUG - assumed 'DEBUG' in /var/www/olifant/backend/app/frontcontroller.php on line 42
+[24-Aug-2015 03:39:32 UTC] PHP Notice:  Use of undefined constant APP_DEV_MODE - assumed 'APP_DEV_MODE' in /var/www/olifant/backend/app/frontcontroller.php on line 42
+[24-Aug-2015 03:39:32 UTC] PHP Notice:  Use of undefined constant DEBUG - assumed 'DEBUG' in /var/www/olifant/backend/app/frontcontroller.php on line 42
+[24-Aug-2015 03:53:42 UTC] PHP Notice:  Use of undefined constant NAMESPACE_SEPARATOR - assumed 'NAMESPACE_SEPARATOR' in /var/www/olifant/backend/app/autoload.php on line 24
+[24-Aug-2015 03:53:42 UTC] PHP Notice:  Use of undefined constant NAMESPACE_SEPARATOR - assumed 'NAMESPACE_SEPARATOR' in /var/www/olifant/backend/app/autoload.php on line 25
+[24-Aug-2015 03:53:42 UTC] PHP Notice:  Use of undefined constant BACKEND_PATH - assumed 'BACKEND_PATH' in /var/www/olifant/backend/app/autoload.php on line 30
+[24-Aug-2015 03:53:42 UTC] PHP Fatal error:  Class 'app\EventListener' not found in /var/www/olifant/backend/setup/events.php on line 2
+[24-Aug-2015 03:54:59 UTC] PHP Notice:  Use of undefined constant APP_DEV_MODE - assumed 'APP_DEV_MODE' in /var/www/olifant/backend/app/frontcontroller.php on line 42
+[24-Aug-2015 03:54:59 UTC] PHP Notice:  Use of undefined constant DEBUG - assumed 'DEBUG' in /var/www/olifant/backend/app/frontcontroller.php on line 42
+[24-Aug-2015 03:55:17 UTC] PHP Notice:  Use of undefined constant DEBUG - assumed 'DEBUG' in /var/www/olifant/backend/app/frontcontroller.php on line 42
