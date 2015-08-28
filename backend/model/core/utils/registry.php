@@ -12,7 +12,7 @@
 
 		private function __construct()
 		{
-			$this->storage_path = \app\conf\APP_PATH . '/com/storage.reg';
+			$this->storage_path = \app\conf\APP_PATH . '/registry/storage.reg';
 
 			if(is_readable($this->storage_path)){
 				$this->storage = unserialize(file_get_contents($this->storage_path));
@@ -41,8 +41,8 @@
 		{
 			if(isset($this->storage[$key]))
 				return $this->storage[$key];
-			else
-				throw new \app\AppException('Undefined key: ' . $key);
+			
+			return null;
 		}
 
 		public function getAll()

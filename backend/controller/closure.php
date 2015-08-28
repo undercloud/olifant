@@ -8,7 +8,11 @@
 
 		public static function bind($closure)
 		{
-			$uniqfn = 'method' . (++self::$index);
+			if(false == \is_closure($closure)){
+				throw new \app\AppException('Invalid closure');
+			}
+
+			$uniqfn = 'closureMethod' . (++self::$index);
 			self::$fn[$uniqfn] = $closure;
 
 			return $uniqfn;

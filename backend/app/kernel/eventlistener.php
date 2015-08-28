@@ -1,5 +1,5 @@
 <?php
-	namespace app;
+	namespace olifant\kernel;
 
 	class EventListener
 	{
@@ -7,6 +7,7 @@
 		private static $instance = null;
 
 		private function __construct(){}
+		private function __wakeup(){}
 
 		public static function getInstance()
 		{	

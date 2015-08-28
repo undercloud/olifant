@@ -12,23 +12,24 @@
 		define(__NAMESPACE__ . '\MODEL_PATH'      , BACKEND_PATH . '/model');
 		define(__NAMESPACE__ . '\VIEW_PATH'       , BACKEND_PATH . '/view');
 		define(__NAMESPACE__ . '\SETUP_PATH'      , BACKEND_PATH . '/setup');
+		define(__NAMESPACE__ . '\STORAGE_PATH'    , __DIR__ . '/../storage');
 	}
 
 	namespace {
-		require_once \app\conf\BACKEND_PATH . '/app/autoload.php';
-		spl_autoload_register('\app\Autoload::load');
+		require_once \app\conf\BACKEND_PATH . '/app/kernel/autoload.php';
+		spl_autoload_register('\olifant\kernel\Autoload::load');
 
 		$configs = array(
 			'general',
 			'enviroment',
 			'upgrade',
-			'events'
+			//'events'
 		);
 
 		foreach($configs as $conf){
 			require_once \app\conf\SETUP_PATH . DIRECTORY_SEPARATOR . $conf . '.php';
 		}
 
-		\app\Application::run();
+		\olifant\kernel\Application::run();
 	}
 ?>

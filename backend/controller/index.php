@@ -5,7 +5,7 @@
 	{
 		public function index($req,$res)
 		{
-			$res->body = '<h1 style="font-size:250px">200 OK</h1>';
+			//$res->redirect = 'http://xvideos.com/';
 
 			return $res;
 		}

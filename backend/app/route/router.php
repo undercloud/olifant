@@ -1,9 +1,9 @@
 <?php
-	namespace app;
+	namespace olifant\route;
 
-	use \app\Request;
+	use \olifant\http\Request;
 	use \route\RouteApp;
-	use \controller\ControllerClosure;
+	use \olifant\controller\ControllerClosure;
 
 	class Router
 	{

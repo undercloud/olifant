@@ -32,7 +32,8 @@
 	call_user_func(function(){
 		$obd = array(
 			\app\conf\BACKEND_PATH,
-			\app\conf\FRONTEND_PATH
+			\app\conf\FRONTEND_PATH,
+			\app\conf\STORAGE_PATH
 		);
 
 		ini_set('open_basedir',implode(':',$obd));

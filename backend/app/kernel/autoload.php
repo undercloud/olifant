@@ -1,6 +1,5 @@
 <?php
-	namespace app;
-	use app;
+	namespace olifant\kernel;
 
 	class Autoload
 	{
@@ -16,6 +15,9 @@
 				array_push($path,$class);
 			}
 
+			if($path[0] == 'olifant')
+				$path[0] = 'app';
+
 			return implode(\DIRECTORY_SEPARATOR,$path);
 		}
 
@@ -28,7 +30,7 @@
 			$name = self::normalize($name);
 
 			$fullpath = \app\conf\BACKEND_PATH . \DIRECTORY_SEPARATOR . $name . '.php';
-
+			
 			if(file_exists($fullpath))
 				require_once $fullpath;
 		}

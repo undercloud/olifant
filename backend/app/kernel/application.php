@@ -1,6 +1,10 @@
 <?php
-	namespace app;
-	use app;
+	namespace olifant\kernel;
+	
+	use \olifant\http\Request;
+	use \olifant\http\Response;
+	use \olifant\route\Router;
+	use \olifant\controller\FrontController;
 
 	class Application
 	{
@@ -18,7 +22,7 @@
 			$input  = $request->build();
 			$output = $response->prepare();
 
-			MiddleWare::before($input,$output,$callable);
+			//MiddleWare::before($input,$output,$callable);
 
 			$output = FrontController::getInstance()
 			->setController($callable->controller)
@@ -26,7 +30,7 @@
 			->setParams($input,$output)
 			->exec();
 
-			MiddleWare::after($input,$output,$callable);
+			//MiddleWare::after($input,$output,$callable);
 
 			if(is_object($output)){
 				$response->send($output);

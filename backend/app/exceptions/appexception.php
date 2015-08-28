@@ -1,5 +1,5 @@
 <?php
-	namespace app;
+	namespace olifant\exceptions;
 
 	class AppException extends \Exception
 	{

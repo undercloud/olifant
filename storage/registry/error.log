@@ -19,3 +19,5 @@
 [24-Aug-2015 03:54:59 UTC] PHP Notice:  Use of undefined constant APP_DEV_MODE - assumed 'APP_DEV_MODE' in /var/www/olifant/backend/app/frontcontroller.php on line 42
 [24-Aug-2015 03:54:59 UTC] PHP Notice:  Use of undefined constant DEBUG - assumed 'DEBUG' in /var/www/olifant/backend/app/frontcontroller.php on line 42
 [24-Aug-2015 03:55:17 UTC] PHP Notice:  Use of undefined constant DEBUG - assumed 'DEBUG' in /var/www/olifant/backend/app/frontcontroller.php on line 42
+[24-Aug-2015 19:20:01 UTC] PHP Fatal error:  Uncaught app\AppException: [0]: Invalid closure
+  thrown in /var/www/olifant/backend/controller/closure.php on line 12

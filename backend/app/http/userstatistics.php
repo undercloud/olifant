@@ -1,5 +1,5 @@
 <?php
-	namespace model\core\utils;
+	namespace model\core\http;
 	
 		class ModelUserStatistics
 		{
