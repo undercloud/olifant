@@ -5,28 +5,24 @@
 
 	class Request
 	{
-		private $uri = null;
+		private $uri    = null;
+		private $mapkey = null;
 
 		public function __construct($uri = null)
 		{
 			if(null === $uri)
 				$uri = $_SERVER['REQUEST_URI'];
 
-			if($uri === '/'){
-				$this->uri = 'index';
-			}else if(0 === strpos($uri,'/?')){
-				$this->uri = 'index' . substr($uri,1);
-			}else{
-				$pos = strpos($uri,'?');
-				if($pos !== false)
-					$uri = substr($uri,0,$pos);
+			if(!$uri)
+				$uri = '/';
+
+			$pos = strpos($uri,'?');
+			if($pos !== false)
+				$uri = substr($uri,0,$pos);
 			
-				$this->uri = $uri;
-			}
+			$this->uri = $uri;
 
 			$this->cleanUri();
-
-			return $this;
 		}
 
 		public function getUri()
@@ -36,26 +32,78 @@
 
 		private function cleanUri()
 		{
-			$this->uri = implode(
-				'/',
-				array_filter(
-					explode('/',$this->uri),
-					function($v){
-						return ($v != '');
-					}	
-				)
-			);
+			if($this->uri != '/'){
+				$this->uri = implode(
+					'/',
+					array_filter(
+						explode('/',$this->uri),
+						function($v){
+							return (false == is_blank($v));
+						}	
+					)
+				);
+			}
+
+			if(!$this->uri){
+				$this->uri = '/';
+			}
 		}
 
-		public function excludeSubPath($subpath)
+		public function excludeSubPath($mapkey)
 		{
-			$this->uri = preg_replace('/^' . addcslashes($subpath,'/') . '/i','',$this->uri,1);
-			$this->cleanUri();
+			if($mapkey != '/'){
+				$rx = '/^' . addcslashes($mapkey,'/') . '/i';
+
+				$this->mapkey = preg_replace($rx,'',$this->mapkey,1);
+				$this->uri    = preg_replace($rx,'',$this->uri,1);
+				
+				$this->cleanUri();
+			}
+
+			return $this;
+		}
+
+		public function setMapKey($mapkey)
+		{
+			$this->mapkey = $mapkey;
+
+			return $this;
 		}
 
 		public function parseParams()
 		{
-			return $this->uri ? explode('/',$this->uri) : array();
+			$params = array();
+			if($this->uri)
+				$params = array_values(
+					array_filter(
+						explode('/',$this->uri),
+						function($v){
+							return (false == is_blank($v));
+						}
+					)
+				);
+
+			if($this->mapkey){
+				$segments = array_values(
+					array_filter(
+						explode('/:',$this->mapkey),
+						function($v){
+							return (false == is_blank($v));
+						}
+					)
+				);
+
+				foreach($segments as $k=>$p){
+					if(isset($params[$k])){
+						$params[$p] = $params[$k];
+						unset($params[$k]);
+					}else{
+						$params[$p] = null;
+					}
+				}
+			}
+
+			return $params;
 		}
 
 		public function build()

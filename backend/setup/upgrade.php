@@ -26,4 +26,15 @@
 		}
 	}
 	
+	if(false == function_exists('is_blank')){
+		function is_blank($v){
+			return (
+				($v === '')    or
+				($v === null)  or
+				($v === false) or
+				(is_array($v)  and 0 == count($v)) or
+				(is_object($v) and 0 == count((array)$v))
+			);
+		}
+	}
 ?>

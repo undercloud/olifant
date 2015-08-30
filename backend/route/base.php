@@ -12,12 +12,6 @@
 			return $this;
 		}
 
-		public function defaults($call,$option = array())
-		{
-			$this->on(null,$call,$option);	
-			return $this;
-		}
-
 		public function assign($context)
 		{
 			$this->context = $context;

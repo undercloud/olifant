@@ -14,6 +14,15 @@
 			$this->request = $req;
 		}
 
+		private function cleanPath($path)
+		{
+			if(false !== ($pos = strpos($path,':'))){
+				return substr($path,0,$pos);
+			}
+
+			return $path;
+		}
+
 		public function route($route = null)
 		{
 			$ro = ($route ? (new $route()) : (new RouteApp()));
@@ -26,8 +35,10 @@
 			$call   = null;
 			$option = array();
 
-			foreach($map as $path=>$target){
-				if(preg_match('/^' . addcslashes($path,'/') . '/i',$uri)){
+			foreach($map as $mapkey=>$target){
+				$cleaned = $this->cleanPath($mapkey);
+				
+				if((0 === stripos($uri,$cleaned)) or (null !== $route and $cleaned[0] == '/')){
 					list($call,$option) = $target;
 
 					if($option){
@@ -49,7 +60,8 @@
 						}
 					}
 
-					$this->request->excludeSubPath($path);
+					$this->request->setMapKey($mapkey);
+					$this->request->excludeSubPath($cleaned);
 
 					break;
 				}
@@ -78,7 +90,7 @@
 			if(\is_closure($call)){
 				return (object)array(
 					'controller' => '\\controller\\ControllerClosure',
-					'action'     => ControllerClosure::bind($call)
+					'action'     => \controller\ControllerClosure::bind($call)
 				);
 			}
 
