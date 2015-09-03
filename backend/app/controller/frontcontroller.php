@@ -49,8 +49,8 @@
 				if(false === class_exists($this->controller))
 					throw new \olifant\exceptions\AppException('Class ' . $this->controller . ' not found');
 
-				if(false === is_subclass_of($this->controller,'\controller\ControllerBase'))
-					throw new \olifant\exceptions\AppException('Class ' . $this->controller . ' is not instanceof \controller\ControllerBase');
+				if(false === is_subclass_of($this->controller,'\olifant\controller\ControllerBase'))
+					throw new \olifant\exceptions\AppException('Class ' . $this->controller . ' is not instanceof \olifant\controller\ControllerBase');
 
 				if(null === $this->action)
 					throw new \olifant\exceptions\AppException('Method ' . $this->action . ' is not defined');

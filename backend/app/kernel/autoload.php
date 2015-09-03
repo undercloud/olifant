@@ -5,20 +5,33 @@
 	{
 		private static function normalize($name)
 		{
-			$path  = explode(\DIRECTORY_SEPARATOR,$name);
-			$ns    = reset($path); 
-			$class = end($path);
+			$exclude = array(
+				'olifant/route/router' => 'app/route/router',
+				'olifant/route/routebase' => 'app/route/base',
+				'olifant/controller/frontcontroller' => 'app/controller/frontcontroller',
+				'olifant/controller/controllerbase' => 'app/controller/base'
+			);
 
-			if(in_array($ns,array('controller','model','route'))){
-				$class = str_replace($ns,'',$class);
-				array_pop($path);
-				array_push($path,$class);
+			if(array_key_exists($name,$exclude)){
+				return $exclude[$name];
+			}else{
+				$path  = explode(\DIRECTORY_SEPARATOR,$name);
+				$class = end($path);
+
+				if($path[0] == 'olifant'){
+					if(in_array($path[1],array('route','controller'))){
+						unset($path[0]);
+
+						$class = str_replace($path[1],'',$class);
+						array_pop($path);
+						array_push($path,$class);
+					}else{
+						$path[0] = 'app';
+					}
+				}	
+
+				return implode(\DIRECTORY_SEPARATOR,$path);
 			}
-
-			if($path[0] == 'olifant')
-				$path[0] = 'app';
-
-			return implode(\DIRECTORY_SEPARATOR,$path);
 		}
 
 		public static function load($name)

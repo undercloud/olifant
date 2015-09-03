@@ -2,7 +2,7 @@
 	namespace olifant\route;
 
 	use \olifant\http\Request;
-	use \route\RouteApp;
+	use \olifant\route\RouteApp;
 	use \olifant\controller\ControllerClosure;
 
 	class Router
@@ -17,7 +17,13 @@
 		private function cleanPath($path)
 		{
 			if(false !== ($pos = strpos($path,':'))){
-				return substr($path,0,$pos);
+				$path = substr($path,0,$pos);
+				$path = $this->request->cleanUri($path);
+
+				if(!$path)
+					$path = '/';
+
+				return $path;
 			}
 
 			return $path;
@@ -69,7 +75,7 @@
 
 			if(null === $call){
 				return (object)array(
-					'controller' => '\\controller\\ControllerError',
+					'controller' => '\\olifant\\controller\\ControllerError',
 					'action'     => 'notFound404'
 				);
 			}
@@ -78,25 +84,25 @@
 				list($controller,$action) = explode('::',$call);
 
 				return (object)array(
-					'controller' => '\\controller\\' . $controller,
+					'controller' => '\\olifant\\controller\\' . $controller,
 					'action'     => $action
 				);
 			}
 
 			if(is_string($call) and 0 === strpos(strtolower($call),'route')){
-				return $this->route('\\route\\' . $call);
+				return $this->route('\\olifant\\route\\' . $call);
 			}
 	
 			if(\is_closure($call)){
 				return (object)array(
-					'controller' => '\\controller\\ControllerClosure',
+					'controller' => '\\olifant\\controller\\ControllerClosure',
 					'action'     => \controller\ControllerClosure::bind($call)
 				);
 			}
 
 			if(null !== $ctx){
 				return (object)array(
-					'controller' => '\\controller\\' . $ctx,
+					'controller' => '\\olifant\\controller\\' . $ctx,
 					'action'     => $call
 				);
 			}

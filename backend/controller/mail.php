@@ -1,5 +1,5 @@
 <?php
-	namespace controller;
+	namespace olifant\controller;
 
 	class ControllerMail extends ControllerBase
 	{

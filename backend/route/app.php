@@ -1,5 +1,5 @@
 <?php
-	namespace route;
+	namespace olifant\route;
 
 	class RouteApp extends RouteBase
 	{
