@@ -7,15 +7,15 @@
 	{
 		public function __construct()
 		{
-			$this->header     = array();
-			$this->body       = null;
+			$this->header = array();
+			$this->body   = null;
 		}
 
 		public function __get($key)
 		{
 			switch($key){
 				case 'cookies':
-					return CookieHelper::getWriter();
+					return ($this->cookies = CookieHelper::getWriter());
 			}
 		}
 	}

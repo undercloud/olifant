@@ -2,8 +2,9 @@
 	namespace olifant\http;
 
 	use \olifant\http\Request;
-	use \model\core\http\CookieHelper;
-	use \model\core\http\UserStatistics;
+	use \olifant\http\CookieHelper;
+	use \olifant\http\UserStatistics;
+	use \olifant\http\Auth;
 
 	class RequestBuilder
 	{
@@ -17,14 +18,14 @@
 
 			$this->ajax        = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
 			$this->params      = $req->parseParams();
-			$this->originalUrl = $_SERVER['REQUEST_URI'];
+			$this->url         = $_SERVER['REQUEST_URI'];
+			$this->path        = ((false !== ($pos = (strpos($_SERVER['REQUEST_URI'],'?')))) ? substr($_SERVER['REQUEST_URI'],0,$pos) : $_SERVER['REQUEST_URI']);
 			$this->query       = (isset($map[$_SERVER['REQUEST_METHOD']]) ? $map[$_SERVER['REQUEST_METHOD']] : array());
 			$this->files       = $_FILES;
 			$this->method      = strtolower($_SERVER['REQUEST_METHOD']);
 			$this->protocol    = $_SERVER['SERVER_PROTOCOL'];
 			$this->port        = $_SERVER['SERVER_PORT'];
-			$this->host        = $_SERVER['HTTP_HOST'];
-			$this->serverName  = $_SERVER['SERVER_NAME'];
+			$this->host        = $_SERVER['SERVER_NAME'];
 			$this->secure      = (isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] == 'on');
 		
 			$this->referer = null;
@@ -42,22 +43,22 @@
 		{
 			switch($key){
 				case 'cookies':
-					return CookieHelper::getReader();
+					return ($this->cookies = CookieHelper::getReader());
 
 				case 'client':
-					return new UserStatistics();
+					return ($this->client = new UserStatistics());
 
 				case 'subdomains':
-					$subdomains = array();
+					$this->subdomains = array();
 					if(false === filter_var($_SERVER['SERVER_NAME'],FILTER_VALIDATE_IP)){
-						$subdomains = array_slice(
+						$this->subdomains = array_slice(
 							array_reverse(
 								explode('.',$_SERVER['SERVER_NAME'])
 							),2
 						);
 					}
 
-					return $subdomains;
+					return $this->subdomains;
 
 				case 'header':
 					if(false == function_exists('getallheaders')){
@@ -73,10 +74,13 @@
 							}
 						}
 
-						return $header;
+						return ($this->header = $header);
 					}else{
-						return getallheaders();
+						return ($this->header = getallheaders());
 					}
+
+				case 'auth':
+					return ($this->auth = new Auth());
 			}
 		}
 	}

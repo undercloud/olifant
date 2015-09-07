@@ -42,23 +42,21 @@
 
 		public function exec()
 		{
-			//if(\app\conf\APP_DEV_MODE == \app\conf\DEBUG){
-				if(null === $this->controller)
-					throw new \olifant\exceptions\AppException('Class controller is not defined');
+			if(null === $this->controller)
+				throw new \olifant\exceptions\AppException('Class controller is not defined');
 
-				if(false === class_exists($this->controller))
-					throw new \olifant\exceptions\AppException('Class ' . $this->controller . ' not found');
+			if(false === class_exists($this->controller))
+				throw new \olifant\exceptions\AppException('Class ' . $this->controller . ' not found');
 
-				if(false === is_subclass_of($this->controller,'\olifant\controller\ControllerBase'))
-					throw new \olifant\exceptions\AppException('Class ' . $this->controller . ' is not instanceof \olifant\controller\ControllerBase');
+			if(false === is_subclass_of($this->controller,'\olifant\controller\ControllerBase'))
+				throw new \olifant\exceptions\AppException('Class ' . $this->controller . ' is not instanceof \olifant\controller\ControllerBase');
 
-				if(null === $this->action)
-					throw new \olifant\exceptions\AppException('Method ' . $this->action . ' is not defined');
+			if(null === $this->action)
+				throw new \olifant\exceptions\AppException('Method ' . $this->action . ' is not defined');
 
-				if('\controller\ControllerClosure' != $this->controller and false === method_exists($this->controller, $this->action))
-					throw new \olifant\exceptions\AppException('Method ' . $this->action .' not found in controller ' . $this->controller);
-			//}
-
+			if('\olifant\controller\ControllerClosure' != $this->controller and false === method_exists($this->controller, $this->action))
+				throw new \olifant\exceptions\AppException('Method ' . $this->action .' not found in controller ' . $this->controller);
+	
 			return call_user_func_array(
 				array(
 					new $this->controller(), 

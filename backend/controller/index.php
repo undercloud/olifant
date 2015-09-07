@@ -5,8 +5,19 @@
 	{
 		public function index($req,$res)
 		{
-				
-			$res->body = 'Index';
+			$req->auth->realm = 'KHazarskaya';
+			$req->auth->type = 'Digest';
+
+			if($req->auth->login == false){
+				$req->auth->ask($res);
+				$res->body = "<h1>CANCELLED</h1>";
+			}else{
+				if($req->auth->check('foo','bar')){
+					echo 'Okay';
+				}else{
+					echo 'Fail';
+				}
+			}
 
 			return $res;
 		}

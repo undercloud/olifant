@@ -56,14 +56,13 @@
 		public function setMapKey($mapkey)
 		{
 			$this->mapkey = $mapkey;
-
 			return $this;
 		}
 
 		public function parseParams()
 		{
 			$params = array();
-			if($this->uri)
+			if($this->uri){
 				$params = array_values(
 					array_filter(
 						explode('/',$this->uri),
@@ -72,17 +71,22 @@
 						}
 					)
 				);
+			}
+
+			array_walk($params,function(&$v){
+				$v = rawurldecode($v);
+			});
 
 			if($this->mapkey){
 				$segments = array_values(
 					array_filter(
 						explode('/:',$this->mapkey),
 						function($v){
-							return (false == is_blank($v));
+							return (false == is_blank($v) and ($v != '/'));
 						}
 					)
 				);
-
+				
 				foreach($segments as $k=>$p){
 					if(isset($params[$k])){
 						$params[$p] = $params[$k];

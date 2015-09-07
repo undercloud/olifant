@@ -3,7 +3,8 @@
 
 	class CookieReader
 	{
-		public static function get($key = false){
+		public static function get($key = false)
+		{
 			if(false === $key){
 				return $_COOKIE;
 			}else{
@@ -11,7 +12,8 @@
 			}
 		}
 
-		public static function has($key){
+		public static function has($key)
+		{
 			return isset($_COOKIE[$key]);
 		}
 	}

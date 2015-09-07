@@ -6,10 +6,11 @@
 		private static function normalize($name)
 		{
 			$exclude = array(
-				'olifant/route/router' => 'app/route/router',
-				'olifant/route/routebase' => 'app/route/base',
-				'olifant/controller/frontcontroller' => 'app/controller/frontcontroller',
-				'olifant/controller/controllerbase' => 'app/controller/base'
+				'olifant/route/router'                 => 'app/route/router',
+				'olifant/route/routebase'              => 'app/route/base',
+				'olifant/controller/frontcontroller'   => 'app/controller/frontcontroller',
+				'olifant/controller/controllerbase'    => 'app/controller/base',
+				'olifant/controller/controllerclosure' => 'app/controller/closure'
 			);
 
 			if(array_key_exists($name,$exclude)){

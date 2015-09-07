@@ -2,7 +2,8 @@
 	namespace olifant\http;
 
 	use \olifant\http\ResponseBuilder;
-	use \app\exceptions\AppException;
+	use \olifant\exceptions\AppException;
+	use \olifant\http\Utils;
 
 	class Response
 	{
@@ -15,7 +16,7 @@
 		{
 			if(isset($res->filePath) or isset($res->fileContents)){
 				if(isset($res->filePath)){
-					$filename = (isset($res->fileName) ? $res->fileName : sprintf('"%s"', addcslashes(basename($res->file), '"\\')));
+					$filename = (isset($res->fileName) ? $res->fileName : sprintf('"%s"',addcslashes(basename($res->file), '"\\')));
 					$size     = filesize($res->file);
 				}else if(isset($res->fileContents)){
 					$filename = (isset($res->fileName) ? $res->fileName : 'Untitled');
@@ -48,7 +49,7 @@
 			}
 
 			if(false == isset($res->statusText))
-				$res->statusText = \olifant\http\Utils::getStatusText($res->status);
+				$res->statusText = Utils::getStatusText($res->status);
 
 			header($_SERVER['SERVER_PROTOCOL'] . ' ' . $res->status . ' ' . $res->statusText);
 

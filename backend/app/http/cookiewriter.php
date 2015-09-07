@@ -1,6 +1,8 @@
 <?php
 	namespace olifant\http;
 
+	use \olifant\exceptions\AppException;
+
 	class CookieWriter
 	{
 		private static $queue = array();
@@ -8,7 +10,7 @@
 		public static function set(array $c)
 		{
 			if(false == isset($c['name'])){
-				throw new \app\exceptions\AppException('Invalid cookie params');
+				throw new AppException('Invalid cookie params');
 			}
 
 			if(false == isset($c['value']))    $c['value']    = '';
@@ -21,21 +23,33 @@
 			self::$queue[] = $c;
 		}
 
-		public static function remove($name)
+		public static function clear($name = null)
 		{
-			self::set(
-				array(
-					'name'   => $name,
-					'value'  => null,
-					'expire' => -1
-				)
-			);
+			if($name === null){
+				foreach($_COOKIE as $ckey=>$cval){
+					self::set(
+						array(
+							'name'   => $ckey,
+							'value'  => null,
+							'expire' => -1
+						)
+					);	
+				}
+			}else{
+				self::set(
+					array(
+						'name'   => $name,
+						'value'  => null,
+						'expire' => -1
+					)
+				);
+			}
 		}
 
 		public static function write()
 		{
 			foreach(self::$queue as $c){
-				setcookie(
+				if(false == setcookie(
 					$c['name'],
 					$c['value'],
 					$c['expire'],
@@ -43,7 +57,9 @@
 					$c['domain'],
 					$c['secure'],
 					$c['httponly']
-				);
+				)){
+					throw new AppException('Can\'t send cookies');
+				}
 			}
 		}
 	}

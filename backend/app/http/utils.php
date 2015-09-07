@@ -1,6 +1,7 @@
 <?php
-
 	namespace olifant\http;
+
+	use \olifant\exceptions\AppException;
 
 	class Utils
 	{
@@ -58,7 +59,7 @@
 			if(isset(self::$codes[$code]))
 				return self::$codes[$code];
 
-			throw new \olifant\exceptions\AppException('Undefined http status code: ' . $code);
+			throw new AppException('Undefined http status code: ' . $code);
 
 		}
 	}

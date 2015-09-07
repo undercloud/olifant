@@ -4,6 +4,7 @@
 	use \olifant\http\Request;
 	use \olifant\route\RouteApp;
 	use \olifant\controller\ControllerClosure;
+	use \olifant\exceptions\AppException;
 
 	class Router
 	{
@@ -22,8 +23,6 @@
 
 				if(!$path)
 					$path = '/';
-
-				return $path;
 			}
 
 			return $path;
@@ -50,7 +49,7 @@
 					if($option){
 						if(isset($option['method'])){
 							$methods = (is_array($option['method']) ? $option['method'] : array($option['method']));
-							if(false === in_array($_SERVER['REQUEST_METHOD'],$methods)){
+							if(false === in_array(strtolower($_SERVER['REQUEST_METHOD']),$methods)){
 								$call = null;
 								break;
 							}
@@ -96,7 +95,7 @@
 			if(\is_closure($call)){
 				return (object)array(
 					'controller' => '\\olifant\\controller\\ControllerClosure',
-					'action'     => \controller\ControllerClosure::bind($call)
+					'action'     => \olifant\controller\ControllerClosure::bind($call)
 				);
 			}
 
@@ -106,6 +105,8 @@
 					'action'     => $call
 				);
 			}
+
+			throw new AppException('Unsupported callback type');
 		}
 	}
 ?>

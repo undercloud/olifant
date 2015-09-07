@@ -10,9 +10,12 @@
 			echo __METHOD__ . '@' . $req->params['name'];
 		}
 
-		public function writeNewMail($req)
+		public function writeNewMail($req,$res)
 		{
-			var_dump($req);
+			$res->status = 475;
+			$res->statusText = 'Idinahui';
+
+			return $res;
 		}
 	}
 ?>
