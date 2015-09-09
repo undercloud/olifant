@@ -15,13 +15,20 @@
 		public function send($res)
 		{
 			if(isset($res->filePath) or isset($res->fileContents)){
-				if(isset($res->filePath)){
+				if(isset($res->XSendFile)){
+
+				}else if(isset($res->XAccelRedirect)){
+
+				}else if(isset($res->filePath)){
 					$filename = (isset($res->fileName) ? $res->fileName : sprintf('"%s"',addcslashes(basename($res->file), '"\\')));
 					$size     = filesize($res->file);
 				}else if(isset($res->fileContents)){
 					$filename = (isset($res->fileName) ? $res->fileName : 'Untitled');
 					$size     = strlen($res->fileContents);
 				}
+
+				//header('X-SendFile: ' . realpath($file));
+				//header('X-Accel-Redirect: ' . $file);
 
 				$res->header = array_merge(
 					$res->header,
@@ -46,6 +53,13 @@
 				$res->header['Location'] = $res->redirect;
 				if(false == isset($res->status))
 					$res->status = 303;
+			}
+
+			if(isset($res->refreshUrl)){
+				if(false === isset($res->refreshTimeout))
+					$res->refreshTimeout = 0;
+
+				$res->header['Refresh'] = $res->refreshTimeout . ' ;url=' . rawurlencode($res->refreshUrl); 
 			}
 
 			if(false == isset($res->statusText))

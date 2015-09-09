@@ -6,7 +6,7 @@
 		public function route()
 		{
 			$this
-				->on('/','Armjan','ControllerIndex::index')
+				->on('/','ControllerIndex::index')
 				->on('params/:name',function($req,$res){
 					if(!$req->params['name'])
 						$req->params['name'] = 'Unknown';

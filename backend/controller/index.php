@@ -5,7 +5,7 @@
 	{
 		public function index($req,$res)
 		{
-			$req->auth->realm = 'KHazarskaya';
+			/*$req->auth->realm = 'KHazarskaya';
 			$req->auth->type = 'Digest';
 
 			if($req->auth->login == false){
@@ -17,7 +17,14 @@
 				}else{
 					echo 'Fail';
 				}
-			}
+			}*/
+
+			//$res->refreshUrl = 'video';
+			//$res->refreshTimeout = 3;
+
+			//$res->body = 'Wait...';
+
+			new \olifant\http\Url();
 
 			return $res;
 		}
