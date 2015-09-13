@@ -23,6 +23,7 @@
 			'general',
 			'enviroment',
 			'upgrade',
+			'middlewares'
 			//'events'
 		);
 

@@ -29,7 +29,7 @@
 			return $this->uri;
 		}
 
-		public function cleanUri($uri)
+		public static function cleanUri($uri)
 		{
 			$uri = trim($uri,' /\\');
 

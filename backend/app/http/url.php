@@ -6,17 +6,6 @@
 		private static $default_scheme = 'unsupportedschemetype';
 		private static $parts = array('scheme','user','pass','host','port','path','query','fragment');
 
-		private function normalize($url)
-		{
-			if(0 === stripos($url,'//')){
-				$url = self::$default_scheme . ':' . $url;
-			}else if(false === stripos($url,'://')){
-				$url = self::$default_scheme . '://' . $url;
-			}
-
-			return $url;
-		}
-
 		public function __construct($url = null)
 		{
 			if(null === $url){
@@ -41,6 +30,17 @@
 				if($this->scheme === self::$default_scheme)
 					$this->scheme = null;
 			}
+		}
+
+		private function normalize($url)
+		{
+			if(0 === stripos($url,'//')){
+				$url = self::$default_scheme . ':' . $url;
+			}else if(false === stripos($url,'://')){
+				$url = self::$default_scheme . '://' . $url;
+			}
+
+			return $url;
 		}
 
 		private function join(array $parts)

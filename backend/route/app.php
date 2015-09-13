@@ -14,7 +14,8 @@
 					echo "<h1>Hello {$req->params['name']}</h1>";
 				})
 				->on('mail','RouteMail')
-				->on('video/:id','ControllerIndex::video');
+				->on('video/:id','ControllerIndex::video')
+				->on('etc','ControllerIndex::etc');
 		}
 	}
 ?>

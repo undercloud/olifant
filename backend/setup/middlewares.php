@@ -1,0 +1,13 @@
+<?php
+	\olifant\middleware\MiddlewareManager::getInstance()
+		->registerBefore(
+			array(
+				'MiddlewareEbal'
+			)
+		)
+		->registerAfter(
+			array(
+				'MiddlewareCensored'
+			)
+		);
+?>

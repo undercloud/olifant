@@ -12,23 +12,16 @@
 			return new ResponseBuilder();
 		}
 
-		public function send($res)
+		public function send(ResponseBuilder &$res)
 		{
 			if(isset($res->filePath) or isset($res->fileContents)){
-				if(isset($res->XSendFile)){
-
-				}else if(isset($res->XAccelRedirect)){
-
-				}else if(isset($res->filePath)){
+				if(isset($res->filePath)){
 					$filename = (isset($res->fileName) ? $res->fileName : sprintf('"%s"',addcslashes(basename($res->file), '"\\')));
 					$size     = filesize($res->file);
 				}else if(isset($res->fileContents)){
 					$filename = (isset($res->fileName) ? $res->fileName : 'Untitled');
 					$size     = strlen($res->fileContents);
 				}
-
-				//header('X-SendFile: ' . realpath($file));
-				//header('X-Accel-Redirect: ' . $file);
 
 				$res->header = array_merge(
 					$res->header,
@@ -65,6 +58,10 @@
 			if(false == isset($res->statusText))
 				$res->statusText = Utils::getStatusText($res->status);
 
+			if(is_array($res->body) or is_object($res->body)){
+				$res->header['Content-Type'] = 'application/json; charset=utf-8';
+			}
+
 			header($_SERVER['SERVER_PROTOCOL'] . ' ' . $res->status . ' ' . $res->statusText);
 
 			foreach($res->header as $key=>$value){
@@ -90,15 +87,8 @@
 			}
 		}
 
-		public function write($data)
-		{
-			echo $data;
-		}
-
 		public function sendJson($data)
 		{
-			header('Content-Type: application/json; charset=utf-8');
-			
 			$encoded = json_encode(
 				$data,
 				JSON_HEX_TAG  | 
@@ -122,6 +112,19 @@
 						: ''
 					)
 				);
+		}
+
+		public function write($data)
+		{
+			echo $data;
+		}
+
+		public static function end(ResponseBuilder &$res)
+		{
+			$helper = new self();
+			$helper->send($res);
+			
+			exit(0);
 		}
 	}
 ?>

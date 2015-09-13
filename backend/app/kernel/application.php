@@ -4,6 +4,7 @@
 	use \olifant\http\Request;
 	use \olifant\http\Response;
 	use \olifant\route\Router;
+	use \olifant\middleware\MiddlewareManager;
 	use \olifant\controller\FrontController;
 
 	class Application
@@ -11,7 +12,7 @@
 		public static function run()
 		{
 			$events   = EventListener::getInstance();
-			$events->trigger('app.run');
+			//$events->trigger('app.run');
 
 			$request  = new Request();
 			$response = new Response();
@@ -22,21 +23,21 @@
 			$input  = $request->build();
 			$output = $response->prepare();
 
-			//MiddleWare::before($input,$output,$callable);
+			MiddlewareManager::getInstance()->before($input,$output,$callable);
 
 			$output = FrontController::getInstance()
-			->setController($callable->controller)
-			->setAction($callable->action)
-			->setParams($input,$output)
-			->exec();
+				->setController($callable->controller)
+				->setAction($callable->action)
+				->setParams($input,$output)
+				->exec();
 
-			//MiddleWare::after($input,$output,$callable);
+			MiddlewareManager::getInstance()->after($input,$output,$callable);
 
 			if(is_object($output)){
 				$response->send($output);
 			}
 
-			$events->trigger('app.done');
+			//$events->trigger('app.done');
 		}
 	}
 ?>

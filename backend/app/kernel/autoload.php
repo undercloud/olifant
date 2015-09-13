@@ -10,9 +10,11 @@
 				'olifant/route/routebase'              => 'app/route/base',
 				'olifant/controller/frontcontroller'   => 'app/controller/frontcontroller',
 				'olifant/controller/controllerbase'    => 'app/controller/base',
-				'olifant/controller/controllerclosure' => 'app/controller/closure'
+				'olifant/controller/controllerclosure' => 'app/controller/closure',
+				'olifant/middleware/middlewaremanager' => 'app/middleware/manager',
+				'olifant/middleware/middlewarebase'    => 'app/middleware/base'
 			);
-
+			
 			if(array_key_exists($name,$exclude)){
 				return $exclude[$name];
 			}else{
@@ -20,7 +22,7 @@
 				$class = end($path);
 
 				if($path[0] == 'olifant'){
-					if(in_array($path[1],array('route','controller'))){
+					if(in_array($path[1],array('route','controller','middleware'))){
 						unset($path[0]);
 
 						$class = str_replace($path[1],'',$class);

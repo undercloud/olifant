@@ -24,7 +24,7 @@
 
 			//$res->body = 'Wait...';
 
-			new \olifant\http\Url();
+			$res->body = 'fuck you';
 
 			return $res;
 		}
@@ -32,9 +32,17 @@
 		public function video($req,$res)
 		{
 			if(!$req->params['id'])
-				$req->params['id'] = 'QKvRYNqlo-M';
+				$req->params['id'] = '13810183';
 
-			$res->body = '<iframe width="560" height="315" src="https://www.youtube.com/embed/' . $req->params['id'] . '" frameborder="0" allowfullscreen></iframe>';
+			$res->body = 'Ok';
+
+			return $res;
+		}
+
+		public function etc($req,$res)
+		{
+			$res->body = $_SERVER;
+
 			return $res;
 		}
 	}
