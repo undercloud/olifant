@@ -6,8 +6,8 @@
 		public function route()
 		{
 			$this->assign('ControllerMail')
-				->on('list','getMailLis')
-				->on('write/:to/:more/:shalavison','writeNewMail')
+				->on('/list','getMailLis')
+				->on('/write/:to/:more/:shalavison','writeNewMail')
 				->on('/:name','defaultAction');
 		}
 	}

@@ -27,12 +27,12 @@
 			return $uniqfn;
 		}
 
-		public function __call($uniqfn,$args)
+		public function __call($uniqfn,array $args)
 		{
 			if(isset(self::$fn[$uniqfn])){
 				return call_user_func_array(self::$fn[$uniqfn],$args);
 			}else{
-				throw new AppException('Method ' . $uniqfn . ' is not defined in ' . CLASS__);
+				throw new AppException('Method ' . $uniqfn . ' is not defined in ' . __CLASS__);
 			}
 		}
 	}

@@ -1,0 +1,4 @@
+[05-Oct-2015 04:25:23 UTC] PHP Notice:  Undefined  in /var/www/olifant/backend/route/app.php on line 22
+[05-Oct-2015 04:25:23 UTC] PHP Warning:  Invalid ar in /var/www/olifant/backend/route/app.php on line 22
+[05-Oct-2015 04:26:11 UTC] PHP Notice:  Undefined variable: hui in /var/www/olifant/backend/route/app.php on line 22
+[05-Oct-2015 04:26:11 UTC] PHP Warning:  Invalid argument supplied for foreach() in /var/www/olifant/backend/route/app.php on line 22

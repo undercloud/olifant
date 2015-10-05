@@ -1,6 +1,7 @@
 <?php
 	namespace olifant\controller;
 
+	use \olifant\Settings;
 	use \olifant\exceptions\AppException;
 
 	class FrontController
@@ -44,21 +45,24 @@
 
 		public function exec()
 		{
-			if(null === $this->controller)
-				throw new \olifant\exceptions\AppException('Class controller is not defined');
+			if('debug' == Settings::get('system.devmode',null)){
+				if(null === $this->controller)
+					throw new \olifant\exceptions\AppException('Class controller is not defined');
 
-			if(false === class_exists($this->controller))
-				throw new AppException('Class ' . $this->controller . ' not found');
+				if(false === class_exists($this->controller))
+					throw new AppException('Class ' . $this->controller . ' not found');
 
-			if(false === is_subclass_of($this->controller,'\olifant\controller\ControllerBase'))
-				throw new AppException('Class ' . $this->controller . ' is not instanceof \olifant\controller\ControllerBase');
+				$instance = '\olifant\controller\ControllerBase';
+				if(false === is_subclass_of($this->controller,$instance))
+					throw new AppException('Class ' . $this->controller . ' is not instanceof ' . $instance);
 
-			if(null === $this->action)
-				throw new AppException('Method ' . $this->action . ' is not defined');
+				if(null === $this->action)
+					throw new AppException('Call method is not defined');
 
-			if('\olifant\controller\ControllerClosure' != $this->controller and false === method_exists($this->controller, $this->action))
-				throw new AppException('Method ' . $this->action .' not found in controller ' . $this->controller);
-	
+				if('\olifant\controller\ControllerClosure' != $this->controller and false === method_exists($this->controller, $this->action))
+					throw new AppException('Method ' . $this->action .' not found in controller ' . $this->controller);
+			}
+
 			return call_user_func_array(
 				array(
 					new $this->controller(), 

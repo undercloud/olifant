@@ -59,7 +59,7 @@
 			if(isset(self::$codes[$code]))
 				return self::$codes[$code];
 
-			throw new AppException('Undefined http status code: ' . $code);
+			throw new AppException('Undefined HTTP status code: ' . $code);
 
 		}
 	}

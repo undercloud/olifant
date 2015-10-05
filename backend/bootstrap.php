@@ -1,8 +1,6 @@
 <?php
-	namespace app\conf {
-		define(__NAMESPACE__ . '\DEBUG'   , 0x000);
-		define(__NAMESPACE__ . '\RELEASE' , 0xFFF);
-		define(__NAMESPACE__ . '\APP_DEV_MODE', DEBUG); // DEBUG | RELEASE
+	namespace olifant\constants
+	{
 		define(__NAMESPACE__ . '\NAMESPACE_SEPARATOR', '\\');
 		define(__NAMESPACE__ . '\BACKEND_PATH'    , __DIR__);
 		define(__NAMESPACE__ . '\FRONTEND_PATH'   , __DIR__ . '/../frontend');
@@ -15,20 +13,22 @@
 		define(__NAMESPACE__ . '\STORAGE_PATH'    , __DIR__ . '/../storage');
 	}
 
-	namespace {
-		require_once \app\conf\BACKEND_PATH . '/app/kernel/autoload.php';
+	namespace
+	{
+		require_once \olifant\constants\BACKEND_PATH . '/app/kernel/autoload.php';
 		spl_autoload_register('\olifant\kernel\Autoload::load');
 
 		$configs = array(
-			'general',
+			'settings',
 			'enviroment',
+			'general',
 			'upgrade',
 			'middlewares'
 			//'events'
 		);
 
 		foreach($configs as $conf){
-			require_once \app\conf\SETUP_PATH . DIRECTORY_SEPARATOR . $conf . '.php';
+			require_once \olifant\constants\SETUP_PATH . DIRECTORY_SEPARATOR . $conf . '.php';
 		}
 
 		\olifant\kernel\Application::run();

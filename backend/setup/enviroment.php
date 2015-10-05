@@ -1,5 +1,4 @@
 <?php
-
 	call_user_func(function(){
 		if((!isset($_SERVER['SERVER_SOFTWARE']) && (php_sapi_name() == 'cli' || (is_numeric($_SERVER['argc']) && $_SERVER['argc'] > 0)))){
 			$_SERVER['REQUEST_METHOD'] = 'CLI';
@@ -13,6 +12,11 @@
 
 			$_SERVER['DOCUMENT_ROOT'] = __DIR__ . '/../backend';
 		}
+
+		$_SERVER['QUERY_PATH'] = $_SERVER['REQUEST_URI'];
+		$pos = strpos($_SERVER['QUERY_PATH'],'?');
+		if($pos !== false)
+			$_SERVER['QUERY_PATH'] = substr($_SERVER['QUERY_PATH'],0,$pos);
 	});
 
 	call_user_func(function(){
@@ -26,22 +30,6 @@
 			array_walk_recursive($_COOKIE, 'stripslashes_gpc');
 			array_walk_recursive($_REQUEST, 'stripslashes_gpc');
 		}
-	});
-
-	call_user_func(function(){
-		$reorder = array();
-
-		foreach($_FILES as $key => $all){
-			if(is_array($all['name'])){
-				foreach($all as $i => $val){
-					$reorder[$i][$key] = $val;    
-				}
-			}else{
-				$reorder[$key] = $all;
-			}
-		}
-
-		$_FILES = $reorder;
 	});
 
 ?>

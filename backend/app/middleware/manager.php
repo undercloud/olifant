@@ -2,6 +2,8 @@
 	namespace olifant\middleware;
 
 	use \olifant\http\Request;
+	use \olifant\http\RequestBuilder;
+	use \olifant\http\ResponseBuilder;
 	use \olifant\exceptions\AppException;
 
 	class MiddlewareManager
@@ -39,15 +41,21 @@
 			return $this;
 		}
 
-		private function resolve($source,&$req,&$res,&$call)
+		private function resolve(
+			array $source,
+			RequestBuilder &$req,
+			ResponseBuilder &$res,
+			\stdClass &$call
+		)
 		{
 			if($source){
 				foreach($source as $mwobject){
 					$class = '\\olifant\\middleware\\' . $mwobject;
 					$middle = new $class;
 
-					if(false === is_subclass_of($middle,'\olifant\middleware\MiddlewareBase')){
-						throw new AppException('Class ' . $class . ' is not instanceof \olifant\controller\MiddlewareBase');
+					$instance = '\olifant\middleware\MiddlewareBase';
+					if(false === is_subclass_of($middle,$instance)){
+						throw new AppException('Class ' . $class . ' is not instanceof ' . $instance);
 					}
 
 					if(isset($middle->path) or isset($middle->exceptPath)){

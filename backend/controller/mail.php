@@ -14,6 +14,7 @@
 		{
 			$res->status = 475;
 			$res->statusText = 'Idinahui';
+			$res->body = 'Mamu ebal';
 
 			return $res;
 		}

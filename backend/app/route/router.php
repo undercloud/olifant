@@ -8,7 +8,7 @@
 
 	class Router
 	{
-		private $req = null;
+		private $request = null;
 
 		public function __construct(Request $req)
 		{
@@ -20,30 +20,58 @@
 			if(false !== ($pos = strpos($path,':'))){
 				$path = substr($path,0,$pos);
 				$path = $this->request->cleanUri($path);
-
-				if(!$path)
-					$path = '/';
 			}
 
 			return $path;
 		}
 
+		private function components($item)
+		{
+			$chain = array_values(
+				array_filter(
+					explode('/',$item)
+				)
+			);
+
+			if(!$chain)
+				$chain = array('/');
+
+			return $chain;
+		}
+
+		private function compare($uri,$path)
+		{
+			foreach($path as $k=>$v){
+				if(false == isset($uri[$k]) or $uri[$k] != $v){
+					return false;
+				}
+			}
+
+			return true;
+		}
+
 		public function route($route = null)
 		{
 			$ro = ($route ? (new $route()) : (new RouteApp()));
+
+			$instance = '\olifant\route\RouteBase';
+			if(false === is_subclass_of($ro,$instance))
+				throw new AppException('Class ' . get_class($ro) . ' is not instanceof ' . $instance);
+
 			$ro->route();
 
 			$ctx = $ro->getContext();
 			$map = $ro->getMap();
 
-			$uri    = $this->request->getUri();
-			$call   = null;
-			$option = array();
+			$uri  = $this->request->getUri();
+			$call = null;
 
+			$uri_component = $this->components($uri);
 			foreach($map as $mapkey=>$target){
 				$cleaned = $this->cleanPath($mapkey);
-				
-				if((0 === stripos($uri,$cleaned)) or (null !== $route and $cleaned[0] == '/')){
+				$path_component = $this->components($cleaned);
+
+				if($this->compare($uri_component,$path_component)){
 					list($call,$option) = $target;
 
 					if($option){

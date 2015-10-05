@@ -3,6 +3,7 @@
 	
 	use \olifant\http\Request;
 	use \olifant\http\Response;
+	use \olifant\http\ResponseBuilder;
 	use \olifant\route\Router;
 	use \olifant\middleware\MiddlewareManager;
 	use \olifant\controller\FrontController;
@@ -14,7 +15,7 @@
 			$events   = EventListener::getInstance();
 			//$events->trigger('app.run');
 
-			$request  = new Request();
+			$request  = new Request($_SERVER['QUERY_PATH']);
 			$response = new Response();
 
 			$router = new Router($request);
@@ -25,17 +26,21 @@
 
 			MiddlewareManager::getInstance()->before($input,$output,$callable);
 
-			$output = FrontController::getInstance()
+			$return = FrontController::getInstance()
 				->setController($callable->controller)
 				->setAction($callable->action)
 				->setParams($input,$output)
 				->exec();
 
+			if($return instanceof ResponseBuilder){
+				$output = $return;
+			}else{
+				$output->body = $return;
+			}
+
 			MiddlewareManager::getInstance()->after($input,$output,$callable);
 
-			if(is_object($output)){
-				$response->send($output);
-			}
+			$response->send($output);
 
 			//$events->trigger('app.done');
 		}

@@ -11,7 +11,6 @@
 		public function handle(&$req,&$res,&$call)
 		{
 			
-			echo 'yes';
 		}
 	}
 ?>

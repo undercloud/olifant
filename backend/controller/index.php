@@ -24,9 +24,12 @@
 
 			//$res->body = 'Wait...';
 
-			$res->body = 'fuck you';
+			new \olifant\model\ModelBase();
+			new \olifant\model\nested\ModelLalka();
+			
+			//echo $ebal;
 
-			return $res;
+			return $_SERVER;
 		}
 
 		public function video($req,$res)

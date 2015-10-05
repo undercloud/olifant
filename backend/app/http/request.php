@@ -8,20 +8,9 @@
 		private $uri    = null;
 		private $mapkey = null;
 
-		public function __construct($uri = null)
+		public function __construct($uri)
 		{
-			if(null === $uri)
-				$uri = $_SERVER['REQUEST_URI'];
-
-			if(!$uri){
-				$uri = '/';
-			}else{
-				$pos = strpos($uri,'?');
-				if($pos !== false)
-					$uri = substr($uri,0,$pos);
-
-				$this->uri = $this->cleanUri($uri);
-			}
+			$this->uri = $this->cleanUri($uri);
 		}
 
 		public function getUri()
@@ -31,7 +20,7 @@
 
 		public static function cleanUri($uri)
 		{
-			$uri = trim($uri,' /\\');
+			$uri = rtrim($uri,' /\\');
 
 			if(!$uri)
 				$uri = '/';

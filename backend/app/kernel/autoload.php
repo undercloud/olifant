@@ -5,14 +5,17 @@
 	{
 		private static function normalize($name)
 		{
+
 			$exclude = array(
+				'olifant/settings'                     => 'app/kernel/settings',
 				'olifant/route/router'                 => 'app/route/router',
 				'olifant/route/routebase'              => 'app/route/base',
 				'olifant/controller/frontcontroller'   => 'app/controller/frontcontroller',
 				'olifant/controller/controllerbase'    => 'app/controller/base',
 				'olifant/controller/controllerclosure' => 'app/controller/closure',
 				'olifant/middleware/middlewaremanager' => 'app/middleware/manager',
-				'olifant/middleware/middlewarebase'    => 'app/middleware/base'
+				'olifant/middleware/middlewarebase'    => 'app/middleware/base',
+				'olifant/cli'                          => 'app/kernel/cli'
 			);
 			
 			if(array_key_exists($name,$exclude)){
@@ -22,7 +25,7 @@
 				$class = end($path);
 
 				if($path[0] == 'olifant'){
-					if(in_array($path[1],array('route','controller','middleware'))){
+					if(in_array($path[1],array('route','controller','model','middleware'))){
 						unset($path[0]);
 
 						$class = str_replace($path[1],'',$class);
@@ -39,13 +42,13 @@
 
 		public static function load($name)
 		{
-			if(\app\conf\NAMESPACE_SEPARATOR != \DIRECTORY_SEPARATOR)
-				$name = str_replace(\app\conf\NAMESPACE_SEPARATOR, \DIRECTORY_SEPARATOR, $name);
+			if(\olifant\constants\NAMESPACE_SEPARATOR != \DIRECTORY_SEPARATOR)
+				$name = str_replace(\olifant\constants\NAMESPACE_SEPARATOR, \DIRECTORY_SEPARATOR, $name);
 
 			$name = strtolower($name);
 			$name = self::normalize($name);
 
-			$fullpath = \app\conf\BACKEND_PATH . \DIRECTORY_SEPARATOR . $name . '.php';
+			$fullpath = \olifant\constants\BACKEND_PATH . \DIRECTORY_SEPARATOR . $name . '.php';
 			
 			if(file_exists($fullpath))
 				require_once $fullpath;

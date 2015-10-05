@@ -1,6 +1,8 @@
 <?php	
 	namespace olifant\http;
 
+	use \olifant\http\ResponseBuilder;
+
 	class Auth
 	{
 		public function __construct()
@@ -12,7 +14,7 @@
 			$this->pass  = (isset($_SERVER['PHP_AUTH_PW'])   ? $_SERVER['PHP_AUTH_PW']   : null);
 		}
 
-		public function ask(\olifant\http\ResponseBuilder &$res)
+		public function ask(ResponseBuilder &$res)
 		{
 			if(false == in_array($this->type,array('Basic','Digest')))
 				throw new AppException('Unknown auth type: ' . $this->type);

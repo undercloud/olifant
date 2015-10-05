@@ -14,64 +14,66 @@
 
 		public function send(ResponseBuilder &$res)
 		{
-			if(isset($res->filePath) or isset($res->fileContents)){
-				if(isset($res->filePath)){
-					$filename = (isset($res->fileName) ? $res->fileName : sprintf('"%s"',addcslashes(basename($res->file), '"\\')));
-					$size     = filesize($res->file);
-				}else if(isset($res->fileContents)){
-					$filename = (isset($res->fileName) ? $res->fileName : 'Untitled');
-					$size     = strlen($res->fileContents);
+			if('CLI' != $_SERVER['REQUEST_METHOD']){
+				if(isset($res->filePath) or isset($res->fileContents)){
+					if(isset($res->filePath)){
+						$filename = (isset($res->fileName) ? $res->fileName : sprintf('"%s"',addcslashes(basename($res->file), '"\\')));
+						$size     = filesize($res->file);
+					}else if(isset($res->fileContents)){
+						$filename = (isset($res->fileName) ? $res->fileName : 'Untitled');
+						$size     = strlen($res->fileContents);
+					}
+
+					$res->header = array_merge(
+						$res->header,
+						array(
+							'Content-Description' => 'File Transfer',
+							'Content-Type' => 'application/octet-stream',
+							'Content-Disposition' => 'attachment; filename=' . $filename,
+							'Content-Transfer-Encoding' => 'binary',
+							'Connection' => 'Keep-Alive',
+							'Expires' => '0',
+							'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+							'Pragma' => 'public',
+							'Content-Length' => $size
+						)
+					);
 				}
 
-				$res->header = array_merge(
-					$res->header,
-					array(
-						'Content-Description' => 'File Transfer',
-						'Content-Type' => 'application/octet-stream',
-						'Content-Disposition' => 'attachment; filename=' . $filename,
-						'Content-Transfer-Encoding' => 'binary',
-						'Connection' => 'Keep-Alive',
-						'Expires' => '0',
-						'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
-						'Pragma' => 'public',
-						'Content-Length' => $size
-					)
-				);
-			}
-
-			if(false == isset($res->status))
-				$res->status = 200;
-
-			if(isset($res->redirect)){
-				$res->header['Location'] = $res->redirect;
 				if(false == isset($res->status))
-					$res->status = 303;
+					$res->status = 200;
+
+				if(isset($res->redirect)){
+					$res->header['Location'] = $res->redirect;
+					if(false == isset($res->status))
+						$res->status = 303;
+				}
+
+				if(isset($res->refreshUrl)){
+					if(false === isset($res->refreshTimeout))
+						$res->refreshTimeout = 0;
+
+					$res->header['Refresh'] = $res->refreshTimeout . ' ;url=' . rawurlencode($res->refreshUrl); 
+				}
+
+				if(false == isset($res->statusText))
+					$res->statusText = Utils::getStatusText($res->status);
+
+				if(is_array($res->body) or is_object($res->body)){
+					$res->header['Content-Type'] = 'application/json; charset=utf-8';
+				}
+
+				header($_SERVER['SERVER_PROTOCOL'] . ' ' . $res->status . ' ' . $res->statusText);
+
+				foreach($res->header as $key=>$value){
+					if(null === $value)
+						header_remove($key);
+					else
+						header($key . ': ' . $value);
+				}
+
+				$res->cookies->write();
 			}
-
-			if(isset($res->refreshUrl)){
-				if(false === isset($res->refreshTimeout))
-					$res->refreshTimeout = 0;
-
-				$res->header['Refresh'] = $res->refreshTimeout . ' ;url=' . rawurlencode($res->refreshUrl); 
-			}
-
-			if(false == isset($res->statusText))
-				$res->statusText = Utils::getStatusText($res->status);
-
-			if(is_array($res->body) or is_object($res->body)){
-				$res->header['Content-Type'] = 'application/json; charset=utf-8';
-			}
-
-			header($_SERVER['SERVER_PROTOCOL'] . ' ' . $res->status . ' ' . $res->statusText);
-
-			foreach($res->header as $key=>$value){
-				if(null === $value)
-					header_remove($key);
-				else
-					header($key . ': ' . $value);
-			}
-
-			$res->cookies->write();
 			
 			if(isset($res->filePath)){
 				while(@ob_end_flush());

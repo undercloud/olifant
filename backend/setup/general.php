@@ -1,43 +1,50 @@
 <?php
 	call_user_func(function(){
-		switch(\app\conf\APP_DEV_MODE){
-			case \app\conf\DEBUG:
+		if('CLI' != $_SERVER['REQUEST_METHOD']){
+			set_error_handler('\olifant\kernel\ErrorHandle::handleError');
+			set_exception_handler('\olifant\kernel\ErrorHandle::handleException');
+		}
+
+		//switch(\olifant\constants\APP_DEV_MODE){
+			//case \olifant\constants\DEBUG:
 				$error_reporting = E_ALL | E_STRICT;
 				$error_mode = 'On';
-			break;
+			//break;
 
-			case \app\conf\RELEASE:
+			/*case \olifant\constants\RELEASE:
 				$error_reporting = 0;
 				$error_mode = 'Off';
-			break;
-		}
+			break;*/
+		//}
 
 		error_reporting($error_reporting);
 		ini_set('display_errors', $error_mode);
 		ini_set('display_startup_errors',$error_mode);
-		ini_set('xdebug.default_enable', $error_mode);
 
 		if($_SERVER['REQUEST_METHOD'] == 'CLI')
 			ini_set('html_errors','Off');
 
-		ini_set('log_errors','On');
-		ini_set('error_log',\app\conf\APP_PATH . '/com/error.log');
+		if(true === \olifant\Settings::get('system.write_log',false)){
+			ini_set('log_errors','On');
+			ini_set('error_log',\olifant\constants\STORAGE_PATH . '/log/' . date('Y-m') . '.error.log');
+			ini_set('log_errors_max_len',10 * 1024);
+		}
 	});
 
 	call_user_func(function(){
 		date_default_timezone_set('UTC');
-		set_time_limit(30);
+		ini_set('memory_limit',\olifant\Settings::get('system.memory_limit','128M'));
+		set_time_limit(\olifant\Settings::get('system.time_limit',30));
 	});
 
 	call_user_func(function(){
 		$obd = array(
-			\app\conf\BACKEND_PATH,
-			\app\conf\FRONTEND_PATH,
-			\app\conf\STORAGE_PATH
+			\olifant\constants\BACKEND_PATH,
+			\olifant\constants\FRONTEND_PATH,
+			\olifant\constants\STORAGE_PATH
 		);
 
 		ini_set('open_basedir',implode(':',$obd));
-		//ini_set('upload_tmp_dir')
 	});
 
 	call_user_func(function(){

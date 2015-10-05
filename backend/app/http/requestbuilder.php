@@ -23,10 +23,24 @@
 			$this->query       = (isset($map[$_SERVER['REQUEST_METHOD']]) ? $map[$_SERVER['REQUEST_METHOD']] : array());
 			$this->files       = $_FILES;
 			$this->method      = strtolower($_SERVER['REQUEST_METHOD']);
-			$this->protocol    = $_SERVER['SERVER_PROTOCOL'];
-			$this->port        = $_SERVER['SERVER_PORT'];
-			$this->host        = $_SERVER['SERVER_NAME'];
-			$this->secure      = (isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] == 'on');
+			
+			$this->overflow = (
+				$_SERVER['REQUEST_METHOD'] == 'POST' && 
+				empty($_POST) &&
+     			empty($_FILES) && 
+     			$_SERVER['CONTENT_LENGTH'] > 0
+			);
+
+			if(isset($_SERVER['protocol']))
+				$this->protocol = $_SERVER['SERVER_PROTOCOL'];
+			
+			if(isset($_SERVER['port']))
+				$this->port = (int)$_SERVER['SERVER_PORT'];
+
+			if(isset($_SERVER['SERVER_NAME']))
+				$this->host = $_SERVER['SERVER_NAME'];
+
+			$this->secure = (isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] == 'on');
 		
 			$this->referer = null;
 			if(isset($_SERVER['HTTP_REFERER'])){
@@ -42,6 +56,21 @@
 		public function __get($key)
 		{
 			switch($key){
+				case 'files':
+					$reorder = array();
+
+					foreach($_FILES as $key => $all){
+						if(is_array($all['name'])){
+							foreach($all as $i => $val){
+								$reorder[$i][$key] = $val;    
+							}
+						}else{
+							$reorder[$key] = $all;
+						}
+					}
+
+					return ($this->files = $reorder);
+
 				case 'cookies':
 					return ($this->cookies = CookieHelper::getReader());
 
