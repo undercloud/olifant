@@ -16,13 +16,13 @@
 				'CLI'  => $_REQUEST
 			);
 
-			$this->ajax        = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
-			$this->params      = $req->parseParams();
-			$this->url         = $_SERVER['REQUEST_URI'];
-			$this->path        = ((false !== ($pos = (strpos($_SERVER['REQUEST_URI'],'?')))) ? substr($_SERVER['REQUEST_URI'],0,$pos) : $_SERVER['REQUEST_URI']);
-			$this->query       = (isset($map[$_SERVER['REQUEST_METHOD']]) ? $map[$_SERVER['REQUEST_METHOD']] : array());
-			$this->files       = $_FILES;
-			$this->method      = strtolower($_SERVER['REQUEST_METHOD']);
+			$this->mapkey  = $req->getMapStack();
+			$this->ajax    = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
+			$this->params  = $req->parseParams();
+			$this->url     = $_SERVER['REQUEST_URI'];
+			$this->path    = $_SERVER['QUERY_PATH'];
+			$this->query   = (isset($map[$_SERVER['REQUEST_METHOD']]) ? $map[$_SERVER['REQUEST_METHOD']] : array());
+			$this->method  = strtolower($_SERVER['REQUEST_METHOD']);
 			
 			$this->overflow = (
 				$_SERVER['REQUEST_METHOD'] == 'POST' && 
@@ -42,12 +42,10 @@
 
 			$this->secure = (isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] == 'on');
 		
-			$this->referer = null;
 			if(isset($_SERVER['HTTP_REFERER'])){
 				$this->referer = $_SERVER['HTTP_REFERER'];
 			}
 
-			$this->json = null;
 			if(isset($_SERVER['CONTENT_TYPE']) and 0 === strpos($_SERVER['CONTENT_TYPE'],'application/json')){
 				$this->json = json_decode(file_get_contents('php://input'),true);
 			}

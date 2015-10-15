@@ -7,21 +7,20 @@
 
 	class Response
 	{
-		public function prepare()
-		{
-			return new ResponseBuilder();
-		}
-
 		public function send(ResponseBuilder &$res)
 		{
 			if('CLI' != $_SERVER['REQUEST_METHOD']){
-				if(isset($res->filePath) or isset($res->fileContents)){
-					if(isset($res->filePath)){
-						$filename = (isset($res->fileName) ? $res->fileName : sprintf('"%s"',addcslashes(basename($res->file), '"\\')));
-						$size     = filesize($res->file);
-					}else if(isset($res->fileContents)){
-						$filename = (isset($res->fileName) ? $res->fileName : 'Untitled');
-						$size     = strlen($res->fileContents);
+				if(isset($res->file)){
+					if(isset($res->file->path)){
+						$filename = (isset($res->file->name) ? $res->file->name : sprintf('"%s"',addcslashes(basename($res->file->path), '"\\')));
+						$size     = filesize($res->file->path);
+					}else if(isset($res->file->contents)){
+						$filename = (isset($res->file->name) ? $res->file->name : 'Untitled');
+						$size     = strlen($res->file->contents);
+					}
+
+					if(false == isset($res->file->header) or false == is_array($res->file->header)){
+						$res->file->header = array();
 					}
 
 					$res->header = array_merge(
@@ -36,7 +35,8 @@
 							'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
 							'Pragma' => 'public',
 							'Content-Length' => $size
-						)
+						),
+						$res->file->header
 					);
 				}
 
@@ -75,11 +75,13 @@
 				$res->cookies->write();
 			}
 			
-			if(isset($res->filePath)){
-				while(@ob_end_flush());
-				readfile($res->filePath);
-			}else if(isset($res->fileContents)){
-				$this->write($res->fileContents);
+			if(isset($res->file)){
+				if(isset($res->file->Path)){
+					while(@ob_end_flush());
+					readfile($res->file->Path);
+				}else if(isset($res->file->contents)){
+					$this->write($res->file->contents);
+				}
 			}else if(isset($res->body)){
 				if(is_scalar($res->body)){
 					$this->write($res->body);

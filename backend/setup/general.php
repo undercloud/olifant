@@ -44,7 +44,7 @@
 			\olifant\constants\STORAGE_PATH
 		);
 
-		ini_set('open_basedir',implode(':',$obd));
+		ini_set('open_basedir',implode(PATH_SEPARATOR,$obd));
 	});
 
 	call_user_func(function(){

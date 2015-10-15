@@ -31,5 +31,4 @@
 			array_walk_recursive($_REQUEST, 'stripslashes_gpc');
 		}
 	});
-
 ?>

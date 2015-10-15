@@ -17,37 +17,19 @@
 
 		private function cleanPath($path)
 		{
-			if(false !== ($pos = strpos($path,':'))){
+			if(false !== ($pos = strpos($path,'/:'))){
 				$path = substr($path,0,$pos);
-				$path = $this->request->cleanUri($path);
 			}
+
+			$path = $this->request->cleanUri($path);
 
 			return $path;
 		}
 
-		private function components($item)
+		public static function compare($cleaned,$uri)
 		{
-			$chain = array_values(
-				array_filter(
-					explode('/',$item)
-				)
-			);
-
-			if(!$chain)
-				$chain = array('/');
-
-			return $chain;
-		}
-
-		private function compare($uri,$path)
-		{
-			foreach($path as $k=>$v){
-				if(false == isset($uri[$k]) or $uri[$k] != $v){
-					return false;
-				}
-			}
-
-			return true;
+			$pattern = "~^" . $cleaned . "(/|$)~u";
+			return preg_match($pattern,$uri);
 		}
 
 		public function route($route = null)
@@ -66,25 +48,23 @@
 			$uri  = $this->request->getUri();
 			$call = null;
 
-			$uri_component = $this->components($uri);
 			foreach($map as $mapkey=>$target){
 				$cleaned = $this->cleanPath($mapkey);
-				$path_component = $this->components($cleaned);
 
-				if($this->compare($uri_component,$path_component)){
-					list($call,$option) = $target;
+				if($this->compare($cleaned,$uri) or (null !== $route and $cleaned === '/')){	
+					list($call,$options) = $target;
 
-					if($option){
-						if(isset($option['method'])){
-							$methods = (is_array($option['method']) ? $option['method'] : array($option['method']));
+					if($options){
+						if(isset($options['method'])){
+							$methods = (is_array($options['method']) ? $options['method'] : array($options['method']));
 							if(false === in_array(strtolower($_SERVER['REQUEST_METHOD']),$methods)){
 								$call = null;
 								break;
 							}
 						}
 
-						if(isset($option['secure'])){
-							if(true === $option['secure']){
+						if(isset($options['secure'])){
+							if(true === $options['secure']){
 								if(false == (isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] == 'on')){
 									$call = null;
 									break;

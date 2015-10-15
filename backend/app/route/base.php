@@ -1,6 +1,8 @@
 <?php
 	namespace olifant\route;
 
+	use \olifant\exceptions\AppException;
+
 	abstract class RouteBase 
 	{
 		private $context = null;
@@ -8,6 +10,10 @@
 
 		public function on($path,$call,$option = array())
 		{
+			if(array_key_exists($path,$this->map)){
+				throw new AppException('Route ' . $path . ' already exists');
+			}
+
 			$this->map[$path] = array($call,$option);
 			return $this;
 		}

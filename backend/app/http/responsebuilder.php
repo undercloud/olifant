@@ -16,6 +16,9 @@
 			switch($key){
 				case 'cookies':
 					return ($this->cookies = CookieHelper::getWriter());
+
+				case 'file':
+					return ($this->file = new \stdClass);
 			}
 		}
 	}

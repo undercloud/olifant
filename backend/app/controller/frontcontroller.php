@@ -2,6 +2,8 @@
 	namespace olifant\controller;
 
 	use \olifant\Settings;
+	use \olifant\http\RequestBuilder;
+	use \olifant\http\ResponseBuilder;
 	use \olifant\exceptions\AppException;
 
 	class FrontController
@@ -14,6 +16,7 @@
 
 		private function __construct(){}
 		private function __wakeup(){}
+		private function __clone(){}
 
 		public static function getInstance()
 		{
@@ -35,7 +38,7 @@
 			return $this;
 		}
 
-		public function setParams($request,$response)
+		public function setParams(RequestBuilder $request, ResponseBuilder $response)
 		{
 			$this->request  = $request;
 			$this->response = $response;
@@ -45,7 +48,7 @@
 
 		public function exec()
 		{
-			if('debug' == Settings::get('system.devmode',null)){
+			//if('debug' == Settings::get('system.devmode',null)){
 				if(null === $this->controller)
 					throw new \olifant\exceptions\AppException('Class controller is not defined');
 
@@ -61,7 +64,7 @@
 
 				if('\olifant\controller\ControllerClosure' != $this->controller and false === method_exists($this->controller, $this->action))
 					throw new AppException('Method ' . $this->action .' not found in controller ' . $this->controller);
-			}
+			//}
 
 			return call_user_func_array(
 				array(

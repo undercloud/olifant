@@ -20,7 +20,8 @@
 			if(false == isset($c['secure']))   $c['secure']   = false;
 			if(false == isset($c['httponly'])) $c['httponly'] = false;
 
-			self::$queue[] = $c;
+			$_COOKIE[$c['name']] = $c['value'];
+			self::$queue[]       = $c;
 		}
 
 		public static function clear($name = null)
@@ -33,7 +34,9 @@
 							'value'  => null,
 							'expire' => -1
 						)
-					);	
+					);
+
+					unset($_COOKIE[$ckey]);
 				}
 			}else{
 				self::set(
@@ -43,6 +46,9 @@
 						'expire' => -1
 					)
 				);
+
+				if(isset($_COOKIE[$name]))
+					unset($_COOKIE[$name]);
 			}
 		}
 

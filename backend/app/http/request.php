@@ -5,11 +5,13 @@
 
 	class Request
 	{
-		private $uri    = null;
-		private $mapkey = null;
+		private $uri      = null;
+		private $mapkey   = null;
+		private $chain    = '';
 
 		public function __construct($uri)
 		{
+			$uri = rawurldecode($uri);
 			$this->uri = $this->cleanUri($uri);
 		}
 
@@ -31,12 +33,18 @@
 		public function excludeSubPath($mapkey)
 		{
 			if($mapkey != '/'){
-				$rx = "/^" . addcslashes($mapkey,'/') . "/i";
+				$rx = "~^" . $mapkey . "~u";
 
-				$this->mapkey = preg_replace($rx,'',$this->mapkey,1);
-				$this->uri    = preg_replace($rx,'',$this->uri,1);
-				
-				$this->uri = $this->cleanUri($this->uri);
+				$chain = &$this->chain;
+
+				$replace = function($m)use(&$chain){
+					$chain .= $m[0];
+
+					return '';
+				};
+
+				$this->mapkey = (string)substr($this->mapkey,strlen($mapkey));
+				$this->uri    = preg_replace_callback($rx,$replace,$this->uri,1);
 			}
 
 			return $this;
@@ -46,6 +54,11 @@
 		{
 			$this->mapkey = $mapkey;
 			return $this;
+		}
+
+		public function getMapStack()
+		{
+			return $this->cleanUri($this->chain);
 		}
 
 		public function parseParams()
@@ -75,7 +88,7 @@
 						}
 					)
 				);
-				
+
 				foreach($segments as $k=>$p){
 					if(isset($params[$k])){
 						$params[$p] = $params[$k];
@@ -87,11 +100,6 @@
 			}
 
 			return $params;
-		}
-
-		public function build()
-		{
-			return new RequestBuilder($this);
 		}
 	}
 ?>

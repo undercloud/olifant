@@ -7,38 +7,23 @@
 		{
 			$this
 				->on('/','ControllerIndex::index')
-				->on('/params/:name',function($req,$res){
-					if(!$req->params['name'])
-						$req->params['name'] = 'Unknown';
+				->on('/album\_[0-9]*/:bebeleh/:mabeleh',function($req,$res){
 
-					echo "<h1>Hello {$req->params['name']}</h1>";
+					var_dump($req);
+
+					$res->body = "<h1>№" . str_replace('album','',reset($req->params)) ."</h1>";
+
+					return $res;
 				})
-				->on('/mail','RouteMail')
-				->on('/video/:id','ControllerIndex::video')
-				->on('/etc','ControllerIndex::etc')
-				->on('/cli',function($req,$res){
-					$cli = new \olifant\CLI();
+				->on('/norx/:sasai/:lalka',function($req,$res){
 
-					foreach($hui as $h);
+					var_dump($req);
+				})
+				->on('/sasai/lalka',function($req,$res){
 
-					$input = $cli->read($cli->highlight('Enter your name:','purple'));
-
-					$cli->write($cli->args('sasai') + 10);
-
-					$cli->process('cd /var/www');
-
-					var_dump(
-						$cli->process(
-							'du',
-							array(
-								'/var/www/',
-								'--si',
-								'--max-depth=1'
-							)
-						)
-					);
-
-				});
+					var_dump($req);
+				})
+				->on('/гандурас','RouteRus');
 		}
 	}
 ?>

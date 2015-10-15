@@ -46,7 +46,7 @@
 		private function join(array $parts)
 		{
 			$inline = '';
-			if(isset($parts['scheme']))   $inline .= $parts['scheme'] . '://';
+			if(isset($parts['scheme'])) $inline .= $parts['scheme'] . '://';
 
 			if(isset($parts['user'])){
 				$inline .= $parts['user'];

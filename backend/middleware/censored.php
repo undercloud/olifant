@@ -4,13 +4,12 @@
 	class MiddlewareCensored extends MiddlewareBase
 	{
 		public $path = array(
-			'/',
-			'etc'
+			'/гандурас/сука',
 		);
 
 		public function handle(&$req,&$res,&$call)
 		{
-			
+			$res->body = 'Ты ' . $res->body;
 		}
 	}
 ?>

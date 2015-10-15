@@ -5,7 +5,6 @@
 	{
 		private static function normalize($name)
 		{
-
 			$exclude = array(
 				'olifant/settings'                     => 'app/kernel/settings',
 				'olifant/route/router'                 => 'app/route/router',

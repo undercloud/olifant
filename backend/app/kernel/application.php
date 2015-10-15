@@ -3,6 +3,7 @@
 	
 	use \olifant\http\Request;
 	use \olifant\http\Response;
+	use \olifant\http\RequestBuilder;
 	use \olifant\http\ResponseBuilder;
 	use \olifant\route\Router;
 	use \olifant\middleware\MiddlewareManager;
@@ -21,8 +22,8 @@
 			$router = new Router($request);
 			$callable = $router->route();
 
-			$input  = $request->build();
-			$output = $response->prepare();
+			$input  = new RequestBuilder($request);
+			$output = new ResponseBuilder();
 
 			MiddlewareManager::getInstance()->before($input,$output,$callable);
 

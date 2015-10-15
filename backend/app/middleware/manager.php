@@ -1,6 +1,7 @@
 <?php
 	namespace olifant\middleware;
 
+	use \olifant\route\Router;
 	use \olifant\http\Request;
 	use \olifant\http\RequestBuilder;
 	use \olifant\http\ResponseBuilder;
@@ -14,6 +15,7 @@
 
 		private function __construct(){}
 		private function __wakeup(){}
+		private function __clone(){}
 
 		public static function getInstance()
 		{
@@ -23,21 +25,15 @@
 			return self::$instance;
 		}
 
-		public function registerBefore($before)
+		public function registerBefore(array $before)
 		{
-			if(false == is_array($before))
-				$before = array($before);
-
 			self::$before = array_merge(self::$before,$before);
 			return $this;
 		}
 
-		public function registerAfter($after)
+		public function registerAfter(array $after)
 		{
-			if(false == is_array($after))
-				$after = array($after);
-
-			self::$after  = array_merge(self::$after,$after);
+			self::$after = array_merge(self::$after,$after);
 			return $this;
 		}
 
@@ -53,13 +49,13 @@
 					$class = '\\olifant\\middleware\\' . $mwobject;
 					$middle = new $class;
 
-					$instance = '\olifant\middleware\MiddlewareBase';
+					$instance = '\\olifant\\middleware\\MiddlewareBase';
 					if(false === is_subclass_of($middle,$instance)){
 						throw new AppException('Class ' . $class . ' is not instanceof ' . $instance);
 					}
 
 					if(isset($middle->path) or isset($middle->exceptPath)){
-						$uri = Request::cleanUri($req->path);
+						$uri = rawurldecode(Request::cleanUri($req->path));
 						$mode = (
 							isset($middle->path)
 							? false
@@ -83,7 +79,7 @@
 						if(is_array($target)){
 							$match = false;
 							foreach($target as $p){
-								if(0 === strpos($uri,$p)){
+								if(Router::compare($p,$uri)){
 									$match = true;
 									break;
 								}
@@ -93,7 +89,7 @@
 								continue;
 							}
 						}else{
-							if($mode === (0 === strpos($uri,$target))){
+							if($mode === (Router::compare($target,$uri))){
 								continue;
 							}
 						}
@@ -126,5 +122,4 @@
 			return $this->resolve(self::$after,$req,$res,$call);
 		}
 	}
-
 ?>
