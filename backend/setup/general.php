@@ -1,8 +1,7 @@
 <?php
 	call_user_func(function(){
 		if('CLI' != $_SERVER['REQUEST_METHOD']){
-			set_error_handler('\olifant\kernel\ErrorHandle::handleError');
-			set_exception_handler('\olifant\kernel\ErrorHandle::handleException');
+			set_error_handler('\olifant\kernel\ErrorHandler::handleError');
 		}
 
 		//switch(\olifant\constants\APP_DEV_MODE){
@@ -24,9 +23,9 @@
 		if($_SERVER['REQUEST_METHOD'] == 'CLI')
 			ini_set('html_errors','Off');
 
-		if(true === \olifant\Settings::get('system.write_log',false)){
+		if(true === \olifant\Settings::get('system.errlog',false)){
 			ini_set('log_errors','On');
-			ini_set('error_log',\olifant\constants\STORAGE_PATH . '/log/' . date('Y-m') . '.error.log');
+			ini_set('error_log',\olifant\constants\STORAGE_PATH . '/log/error/' . date('Y-m') . '.error.log');
 			ini_set('log_errors_max_len',10 * 1024);
 		}
 	});

@@ -1,7 +1,7 @@
 <?php
 	namespace olifant\http;
 
-	use \olifant\http\RequestBuilder;
+	use olifant\http\RequestBuilder;
 
 	class Request
 	{
@@ -24,8 +24,9 @@
 		{
 			$uri = rtrim($uri,' /\\');
 
-			if(!$uri)
+			if(!$uri){
 				$uri = '/';
+			}
 
 			return $uri;
 		}
@@ -33,7 +34,7 @@
 		public function excludeSubPath($mapkey)
 		{
 			if($mapkey != '/'){
-				$rx = "~^" . $mapkey . "~u";
+				$rx = '~^' . $mapkey . '~u';
 
 				$chain = &$this->chain;
 
@@ -43,8 +44,8 @@
 					return '';
 				};
 
-				$this->mapkey = (string)substr($this->mapkey,strlen($mapkey));
-				$this->uri    = preg_replace_callback($rx,$replace,$this->uri,1);
+				$this->mapkey = (string)substr($this->mapkey, strlen($mapkey));
+				$this->uri    = preg_replace_callback($rx, $replace, $this->uri, 1);
 			}
 
 			return $this;
@@ -67,7 +68,7 @@
 			if($this->uri){
 				$params = array_values(
 					array_filter(
-						explode('/',$this->uri),
+						explode('/', $this->uri),
 						function($v){
 							return (false == is_blank($v));
 						}
@@ -82,7 +83,7 @@
 			if($this->mapkey){
 				$segments = array_values(
 					array_filter(
-						explode('/:',$this->mapkey),
+						explode('/:', $this->mapkey),
 						function($v){
 							return (false == is_blank($v) and ($v != '/'));
 						}

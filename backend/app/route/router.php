@@ -1,10 +1,11 @@
 <?php
 	namespace olifant\route;
 
-	use \olifant\http\Request;
-	use \olifant\route\RouteApp;
-	use \olifant\controller\ControllerClosure;
-	use \olifant\exceptions\AppException;
+	use olifant\http\Request;
+	use olifant\http\RequestBuilder;
+	use olifant\route\RouteApp;
+	use olifant\controller\ControllerClosure;
+	use olifant\exceptions\AppException;
 
 	class Router
 	{
@@ -26,18 +27,18 @@
 			return $path;
 		}
 
-		public static function compare($cleaned,$uri)
+		public static function compare($cleaned, $uri)
 		{
-			$pattern = "~^" . $cleaned . "(/|$)~u";
+			$pattern = '~^' . $cleaned . '(/|$)~u';
 			return preg_match($pattern,$uri);
 		}
 
 		public function route($route = null)
 		{
-			$ro = ($route ? (new $route()) : (new RouteApp()));
+			$ro = (null !== $route ? (new $route()) : (new RouteApp()));
 
-			$instance = '\olifant\route\RouteBase';
-			if(false === is_subclass_of($ro,$instance))
+			$instance = '\\olifant\\route\\RouteBase';
+			if(false === is_subclass_of($ro, $instance))
 				throw new AppException('Class ' . get_class($ro) . ' is not instanceof ' . $instance);
 
 			$ro->route();
@@ -51,13 +52,13 @@
 			foreach($map as $mapkey=>$target){
 				$cleaned = $this->cleanPath($mapkey);
 
-				if($this->compare($cleaned,$uri) or (null !== $route and $cleaned === '/')){	
+				if($this->compare($cleaned, $uri) or (null !== $route and $cleaned === '/')){	
 					list($call,$options) = $target;
 
 					if($options){
 						if(isset($options['method'])){
 							$methods = (is_array($options['method']) ? $options['method'] : array($options['method']));
-							if(false === in_array(strtolower($_SERVER['REQUEST_METHOD']),$methods)){
+							if(false === in_array(strtolower($_SERVER['REQUEST_METHOD']), $methods)){
 								$call = null;
 								break;
 							}
@@ -65,7 +66,7 @@
 
 						if(isset($options['secure'])){
 							if(true === $options['secure']){
-								if(false == (isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] == 'on')){
+								if(false == RequestBuilder::isHTTPS()){
 									$call = null;
 									break;
 								}

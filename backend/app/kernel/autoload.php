@@ -14,28 +14,29 @@
 				'olifant/controller/controllerclosure' => 'app/controller/closure',
 				'olifant/middleware/middlewaremanager' => 'app/middleware/manager',
 				'olifant/middleware/middlewarebase'    => 'app/middleware/base',
-				'olifant/cli'                          => 'app/kernel/cli'
+				'olifant/cli'                          => 'app/kernel/cli',
+				'olifant/benchmark'                    => 'app/kernel/benchmark'
 			);
 			
-			if(array_key_exists($name,$exclude)){
+			if(array_key_exists($name, $exclude)){
 				return $exclude[$name];
 			}else{
-				$path  = explode(\DIRECTORY_SEPARATOR,$name);
+				$path  = explode(\DIRECTORY_SEPARATOR, $name);
 				$class = end($path);
 
-				if($path[0] == 'olifant'){
-					if(in_array($path[1],array('route','controller','model','middleware'))){
+				if($path[0] === 'olifant'){
+					if(in_array($path[1], array('route', 'controller', 'model', 'middleware'))){
 						unset($path[0]);
 
-						$class = str_replace($path[1],'',$class);
+						$class = str_replace($path[1], '', $class);
 						array_pop($path);
-						array_push($path,$class);
+						array_push($path, $class);
 					}else{
 						$path[0] = 'app';
 					}
 				}	
 
-				return implode(\DIRECTORY_SEPARATOR,$path);
+				return implode(\DIRECTORY_SEPARATOR, $path);
 			}
 		}
 

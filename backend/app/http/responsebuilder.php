@@ -1,7 +1,7 @@
 <?php
 	namespace olifant\http;
 
-	use \olifant\http\CookieHelper;
+	use olifant\http\CookieWriter;
 
 	class ResponseBuilder
 	{
@@ -15,10 +15,11 @@
 		{
 			switch($key){
 				case 'cookies':
-					return ($this->cookies = CookieHelper::getWriter());
+					return ($this->cookies = new CookieWriter());
 
 				case 'file':
-					return ($this->file = new \stdClass);
+				case 'refresh':
+					return ($this->{$key} = new \stdClass);
 			}
 		}
 	}

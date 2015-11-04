@@ -23,6 +23,7 @@
 			'enviroment',
 			'general',
 			'upgrade',
+			'olifant',
 			'middlewares'
 			//'events'
 		);
@@ -31,6 +32,16 @@
 			require_once \olifant\constants\SETUP_PATH . DIRECTORY_SEPARATOR . $conf . '.php';
 		}
 
-		\olifant\kernel\Application::run();
+		try{
+			\olifant\kernel\Application::run();
+		}catch(Exception $e){
+			if('debug' == \olifant\Settings::get('system.devmode','debug')){
+				\olifant\kernel\ErrorHandler::handleException($e);
+			}
+
+			if(true === \olifant\Settings::get('system.errlog',false)){
+				\olifant\kernel\ErrorHandler::log('PHP Exception' . PHP_EOL . $e);
+			}
+		}
 	}
 ?>

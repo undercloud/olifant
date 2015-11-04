@@ -6,7 +6,7 @@
 		public function route()
 		{
 			$this
-				->on('/','ControllerIndex::index')
+				->on('/index/:name/:surname','ControllerIndex::index')
 				->on('/album\_[0-9]*/:bebeleh/:mabeleh',function($req,$res){
 
 					var_dump($req);
@@ -23,7 +23,20 @@
 
 					var_dump($req);
 				})
-				->on('/гандурас','RouteRus');
+				->on('/гандурас','RouteRus')
+				->on('/cli',function(){
+					$cli = new \olifant\Cli();
+
+					$prompt = $cli->highlight('Enter your name:','white');
+					$name = $cli->read($prompt);
+
+					$cli->write('Hello ' . $name);
+				})
+				->on('/js',function(){
+
+					return '<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>';
+				})
+				->on('/http','ControllerIndex::http');
 		}
 	}
 ?>

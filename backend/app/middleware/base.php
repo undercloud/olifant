@@ -3,7 +3,6 @@
 
 	abstract class MiddlewareBase
 	{
-		abstract public function handle(&$req,&$res,&$call);
+		abstract public function handle(&$req, &$res, &$call);
 	}
-
 ?>

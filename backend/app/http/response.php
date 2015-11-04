@@ -1,9 +1,10 @@
 <?php
 	namespace olifant\http;
 
-	use \olifant\http\ResponseBuilder;
-	use \olifant\exceptions\AppException;
-	use \olifant\http\Utils;
+	use olifant\http\ResponseBuilder;
+	use olifant\exceptions\AppException;
+	use olifant\http\JSON;
+	use olifant\http\Utils;
 
 	class Response
 	{
@@ -12,6 +13,14 @@
 			if('CLI' != $_SERVER['REQUEST_METHOD']){
 				if(isset($res->file)){
 					if(isset($res->file->path)){
+						if(false == is_readable($res->file->path)){
+							throw new AppException('Can\' access file ' . $res->file->path);
+						}
+
+						if(false == is_file($res->file->path)){
+							throw new AppException('File ' . $res->file->path . ' not found');
+						}
+
 						$filename = (isset($res->file->name) ? $res->file->name : sprintf('"%s"',addcslashes(basename($res->file->path), '"\\')));
 						$size     = filesize($res->file->path);
 					}else if(isset($res->file->contents)){
@@ -49,11 +58,11 @@
 						$res->status = 303;
 				}
 
-				if(isset($res->refreshUrl)){
-					if(false === isset($res->refreshTimeout))
-						$res->refreshTimeout = 0;
+				if(isset($res->refresh)){
+					if(false === isset($res->refresh->timeout))
+						$res->refresh->timeout = 0;
 
-					$res->header['Refresh'] = $res->refreshTimeout . ' ;url=' . rawurlencode($res->refreshUrl); 
+					$res->header['Refresh'] = $res->refresh->timeout . ' ;url=' . rawurlencode($res->refresh->url); 
 				}
 
 				if(false == isset($res->statusText))
@@ -76,9 +85,9 @@
 			}
 			
 			if(isset($res->file)){
-				if(isset($res->file->Path)){
+				if(isset($res->file->path)){
 					while(@ob_end_flush());
-					readfile($res->file->Path);
+					readfile($res->file->path);
 				}else if(isset($res->file->contents)){
 					$this->write($res->file->contents);
 				}
@@ -86,38 +95,13 @@
 				if(is_scalar($res->body)){
 					$this->write($res->body);
 				}else if(is_array($res->body) or is_object($res->body)){
-					$this->sendJson($res->body);
+					$this->write(
+						JSON::encode($res->body)
+					);
 				}
 			}
 		}
-
-		public function sendJson($data)
-		{
-			$encoded = json_encode(
-				$data,
-				JSON_HEX_TAG  | 
-				JSON_HEX_AMP  | 
-				JSON_HEX_APOS | 
-				JSON_HEX_QUOT | 
-				JSON_FORCE_OBJECT
-			);
-
-			$last_error = json_last_error();
-
-			if($last_error == JSON_ERROR_NONE)
-				return $this->write($encoded);
-			else
-				throw new AppException(
-					'Malformed JSON ' . 
-					$last_error .
-					(
-						function_exists('json_last_error_msg')
-						? (' ' . json_last_error_msg())
-						: ''
-					)
-				);
-		}
-
+		
 		public function write($data)
 		{
 			echo $data;

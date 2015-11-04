@@ -1,17 +1,19 @@
 <?php
 	namespace olifant\http;
 
-	use \olifant\exceptions\AppException;
+	use olifant\exceptions\AppException;
 
 	class CookieWriter
 	{
 		private static $queue = array();
 
-		public static function set(array $c)
+		public static function set(array $c, $raw = false)
 		{
 			if(false == isset($c['name'])){
 				throw new AppException('Invalid cookie params');
 			}
+
+			$c['raw'] = $raw;
 
 			if(false == isset($c['value']))    $c['value']    = '';
 			if(false == isset($c['expire']))   $c['expire']   = 0;
@@ -55,7 +57,8 @@
 		public static function write()
 		{
 			foreach(self::$queue as $c){
-				if(false == setcookie(
+
+				$arguments = array(
 					$c['name'],
 					$c['value'],
 					$c['expire'],
@@ -63,8 +66,12 @@
 					$c['domain'],
 					$c['secure'],
 					$c['httponly']
-				)){
-					throw new AppException('Can\'t send cookies');
+				);
+
+				$fn = (($c['raw'] === true) ? 'setrawcookie(name)' : 'setcookie');
+
+				if(false == call_user_func_array($fn, $arguments)){
+					throw new AppException('Can\'t send cookies for \'' . $c['name'] . '\'');
 				}
 			}
 		}

@@ -19,6 +19,13 @@
 			$_SERVER['QUERY_PATH'] = substr($_SERVER['QUERY_PATH'],0,$pos);
 	});
 
+	/*call_user_func(function(){
+		$_SERVER['PHP_INPUT'] = file_get_contents('php://input');
+		if(in_array(strtolower($_SERVER['REQUEST_METHOD']),array('put','delete'))){
+			parse_str($_SERVER['PHP_INPUT'],$_REQUEST);
+		}
+	});*/
+
 	call_user_func(function(){
 		if(function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc()){
 			function stripslashes_gpc(&$value){

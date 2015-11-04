@@ -1,15 +1,11 @@
-Options -ExecCGI
 RewriteEngine On
 AddDefaultCharset UTF-8
-Options -Indexes
-Options +FollowSymlinks
-DirectoryIndex index.php
 RewriteCond   %{REQUEST_FILENAME}       !-d
 RewriteCond   %{REQUEST_FILENAME}       !-f
 RewriteRule   ^(.*) index.php?%{QUERY_STRING}
 
-php_flag engine On
-php_flag file_uploads On
-php_value post_max_size 8M
-php_value upload_max_filesize 8M
-php_value max_file_uploads 20
+#php_flag engine On
+#php_flag file_uploads On
+#php_value post_max_size 8M
+#php_value upload_max_filesize 8M
+#php_value max_file_uploads 20

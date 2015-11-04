@@ -1,0 +1,41 @@
+[19-Oct-2015 20:07:20 UTC] PHP  warning: Division by zero in /var/www/olifant/backend/controller/index.php on line 8
+[19-Oct-2015 20:07:20 UTC] PHP  warning: Cannot modify header information - headers already sent by (output started at /var/www/olifant/backend/app/kernel/errorhandler.php:193) in /var/www/olifant/backend/app/http/response.php on line 70
+[19-Oct-2015 20:08:39 UTC] PHP Warning: Division by zero in /var/www/olifant/backend/controller/index.php on line 8
+[19-Oct-2015 20:08:39 UTC] PHP Warning: Cannot modify header information - headers already sent by (output started at /var/www/olifant/backend/app/kernel/errorhandler.php:193) in /var/www/olifant/backend/app/http/response.php on line 70
+[19-Oct-2015 20:13:00 UTC] PHP Warning: Division by zero in /var/www/olifant/backend/controller/index.php on line 8
+[19-Oct-2015 20:13:00 UTC] PHP Warning: Cannot modify header information - headers already sent by (output started at /var/www/olifant/backend/app/kernel/errorhandler.php:193) in /var/www/olifant/backend/app/http/response.php on line 70
+[19-Oct-2015 20:13:34 UTC] PHP Exception
+olifant\exceptions\AppException: [0]: File /var/www/olifant/backend/controller/index.txt not found
+[19-Oct-2015 20:15:06 UTC] PHP Exception
+olifant\exceptions\AppException: [0]: File /var/www/olifant/backend/controller/index.txt not found
+[19-Oct-2015 20:16:32 UTC] PHP Exception
+olifant\exceptions\AppException: [0]: File /var/www/olifant/backend/controller/index.txt not found
+[22-Oct-2015 19:23:43 UTC] PHP Parse error:  syntax error, unexpected ',' in /var/www/olifant/backend/app/kernel/benchmark.php on line 42
+[22-Oct-2015 19:24:07 UTC] PHP Fatal error:  Class 'olifant\kernel\Benchmark' not found in /var/www/olifant/backend/app/kernel/application.php on line 16
+[22-Oct-2015 19:27:47 UTC] PHP Exception
+olifant\exceptions\AppException: [0]: File /var/www/olifant/backend/controller/index.txt not found
+[22-Oct-2015 19:31:50 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 13369394 bytes) in /var/www/olifant/backend/app/http/response.php on line 107
+[22-Oct-2015 19:32:33 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 14179243 bytes) in /var/www/olifant/backend/app/http/response.php on line 107
+[22-Oct-2015 19:57:22 UTC] PHP Notice: Trying to get property of non-object in /var/www/olifant/backend/app/kernel/application.php on line 48
+[22-Oct-2015 19:57:22 UTC] PHP Fatal error:  Cannot use object of type stdClass as array in /var/www/olifant/backend/app/kernel/benchmark.php on line 26
+[24-Oct-2015 03:30:23 UTC] PHP Notice: Undefined variable: stack in /var/www/olifant/backend/app/kernel/benchmark.php on line 44
+[24-Oct-2015 03:30:23 UTC] PHP Notice: Undefined variable: stack in /var/www/olifant/backend/app/kernel/benchmark.php on line 44
+[24-Oct-2015 03:32:06 UTC] PHP Notice: Undefined variable: stack in /var/www/olifant/backend/app/kernel/benchmark.php on line 44
+[24-Oct-2015 03:32:07 UTC] PHP Notice: Undefined variable: stack in /var/www/olifant/backend/app/kernel/benchmark.php on line 44
+[24-Oct-2015 03:44:37 UTC] PHP Recoverable error: Object of class stdClass could not be converted to string in /var/www/olifant/backend/app/kernel/application.php on line 50
+[24-Oct-2015 03:44:38 UTC] PHP Recoverable error: Object of class stdClass could not be converted to string in /var/www/olifant/backend/app/kernel/application.php on line 50
+[24-Oct-2015 03:44:49 UTC] PHP Recoverable error: Object of class stdClass could not be converted to string in /var/www/olifant/backend/app/kernel/application.php on line 50
+[24-Oct-2015 03:46:24 UTC] PHP Warning: file_get_contents(http://sasai.com/): failed to open stream: HTTP request failed! HTTP/1.1 463 
+ in /var/www/olifant/backend/app/kernel/application.php on line 51
+[24-Oct-2015 03:46:32 UTC] PHP Warning: file_get_contents(http://sasai.com/): failed to open stream: HTTP request failed! HTTP/1.1 463 
+ in /var/www/olifant/backend/app/kernel/application.php on line 51
+[24-Oct-2015 03:47:51 UTC] PHP Warning: file_get_contents(http://sasai.com/): failed to open stream: HTTP request failed! HTTP/1.1 463 
+ in /var/www/olifant/backend/app/kernel/application.php on line 51
+[24-Oct-2015 03:47:53 UTC] PHP Warning: file_get_contents(http://sasai.com/): failed to open stream: HTTP request failed! HTTP/1.1 463 
+ in /var/www/olifant/backend/app/kernel/application.php on line 51
+[24-Oct-2015 03:47:54 UTC] PHP Warning: file_get_contents(http://sasai.com/): failed to open stream: HTTP request failed! HTTP/1.1 463 
+ in /var/www/olifant/backend/app/kernel/application.php on line 51
+[24-Oct-2015 03:47:55 UTC] PHP Warning: file_get_contents(http://sasai.com/): failed to open stream: HTTP request failed! HTTP/1.1 463 
+ in /var/www/olifant/backend/app/kernel/application.php on line 51
+[24-Oct-2015 04:08:09 UTC] PHP Warning: file_get_contents(http://vk.com/): failed to open stream: Connection timed out in /var/www/olifant/backend/app/kernel/application.php on line 59
+[24-Oct-2015 04:30:47 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20 bytes) in /var/www/olifant/backend/app/kernel/application.php on line 52

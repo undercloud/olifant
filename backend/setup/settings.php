@@ -2,7 +2,7 @@
 	\olifant\Settings::getInstance()
 		->addSection('system')
 			->set('devmode','debug')
-			->set('write_log',true)
+			->set('errlog',true)
 			->set('time_limit',30)
 			->set('memory_limit','128M')
 

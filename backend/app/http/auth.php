@@ -1,7 +1,7 @@
 <?php	
 	namespace olifant\http;
 
-	use \olifant\http\ResponseBuilder;
+	use olifant\http\ResponseBuilder;
 
 	class Auth
 	{
@@ -16,11 +16,11 @@
 
 		public function ask(ResponseBuilder &$res)
 		{
-			if(false == in_array($this->type,array('Basic','Digest')))
+			if(false == in_array($this->type, array('Basic','Digest')))
 				throw new AppException('Unknown auth type: ' . $this->type);
 
 			$opt = array(
-				'realm="'.$this->realm.'"'
+				'realm="' . $this->realm . '"'
 			);
 
 			if('Digest' === $this->type){
@@ -73,7 +73,6 @@
 			switch($this->type){
 				case 'Basic':
 					return ($user === $this->user and $pass === $this->pass);
-				break;
 
 				case 'Digest':
 					$data = $this->parseDigest();
@@ -86,9 +85,7 @@
 					$valid = md5($A1.':'.$data['nonce'].':'.$data['nc'].':'.$data['cnonce'].':'.$data['qop'].':'.$A2);
 
 					return ($data['response'] === $valid);
-				break;
 			}
-
 		}
 	}
 ?>

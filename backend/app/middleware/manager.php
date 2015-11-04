@@ -1,11 +1,11 @@
 <?php
 	namespace olifant\middleware;
 
-	use \olifant\route\Router;
-	use \olifant\http\Request;
-	use \olifant\http\RequestBuilder;
-	use \olifant\http\ResponseBuilder;
-	use \olifant\exceptions\AppException;
+	use olifant\route\Router;
+	use olifant\http\Request;
+	use olifant\http\RequestBuilder;
+	use olifant\http\ResponseBuilder;
+	use olifant\exceptions\AppException;
 
 	class MiddlewareManager
 	{
@@ -19,30 +19,28 @@
 
 		public static function getInstance()
 		{
-			if(null === self::$instance)
+			if(null === self::$instance){
 				self::$instance = new self();
+			}
 
 			return self::$instance;
 		}
 
 		public function registerBefore(array $before)
 		{
-			self::$before = array_merge(self::$before,$before);
+			self::$before = array_merge(self::$before, $before);
+
 			return $this;
 		}
 
 		public function registerAfter(array $after)
 		{
-			self::$after = array_merge(self::$after,$after);
+			self::$after = array_merge(self::$after, $after);
+			
 			return $this;
 		}
 
-		private function resolve(
-			array $source,
-			RequestBuilder &$req,
-			ResponseBuilder &$res,
-			\stdClass &$call
-		)
+		private function resolve(array $source, RequestBuilder &$req, ResponseBuilder &$res, \stdClass &$call)
 		{
 			if($source){
 				foreach($source as $mwobject){
@@ -50,7 +48,7 @@
 					$middle = new $class;
 
 					$instance = '\\olifant\\middleware\\MiddlewareBase';
-					if(false === is_subclass_of($middle,$instance)){
+					if(false === is_subclass_of($middle, $instance)){
 						throw new AppException('Class ' . $class . ' is not instanceof ' . $instance);
 					}
 
@@ -79,7 +77,7 @@
 						if(is_array($target)){
 							$match = false;
 							foreach($target as $p){
-								if(Router::compare($p,$uri)){
+								if(Router::compare($p, $uri)){
 									$match = true;
 									break;
 								}
@@ -89,7 +87,7 @@
 								continue;
 							}
 						}else{
-							if($mode === (Router::compare($target,$uri))){
+							if($mode === (Router::compare($target, $uri))){
 								continue;
 							}
 						}
@@ -112,14 +110,14 @@
 			return $this;
 		}
 
-		public function before(&$req,&$res,&$call)
+		public function before(&$req, &$res, &$call)
 		{
-			return $this->resolve(self::$before,$req,$res,$call);
+			return $this->resolve(self::$before, $req, $res, $call);
 		}
 
 		public function after(&$req,&$res,&$call)
 		{
-			return $this->resolve(self::$after,$req,$res,$call);
+			return $this->resolve(self::$after, $req, $res, $call);
 		}
 	}
 ?>
