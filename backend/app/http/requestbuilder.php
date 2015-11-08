@@ -5,6 +5,7 @@
 	use olifant\http\CookieReader;
 	use olifant\http\Client;
 	use olifant\http\Auth;
+	use olifant\exceptions\AppException;
 
 	class RequestBuilder
 	{
@@ -91,8 +92,10 @@
 
 					foreach($_FILES as $key => $all){
 						if(is_array($all['name'])){
-							foreach($all as $i => $val){
-								$reorder[$i][$key] = $val;    
+							foreach($all as $property=>$items){
+								foreach($items as $index=>$value){
+									$reorder[$key][$index][$property] = $value;
+								}    
 							}
 						}else{
 							$reorder[$key] = array($all);
@@ -150,6 +153,9 @@
 
 				case 'auth':
 					return ($this->auth = new Auth());
+
+				default:
+					throw new AppException('Undefined property: ' . __CLASS__ . '::' . $key);
 			}
 		}
 	}

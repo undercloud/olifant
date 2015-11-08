@@ -198,13 +198,14 @@
 		public static function handleException($e)
 		{
 			$msg   = $e->getMessage();
+			$code  = $e->getCode();
 			$file  = $e->getFile();
 			$line  = $e->getLine();
 			$trace = $e->getTrace();
 
 			$echo = '<div class="olifant-error">' .
 					  '<div class="item">' . 
-					    '<h1>Exception: ' . $msg . '</h1>' .
+					    '<h1>Exception: ' . $msg . ':' . $code . '</h1>' .
 						  '<div class="path">' . $file . '</div>' .
 						  self::getSource($file,$line) .
 					  '</div>' . 

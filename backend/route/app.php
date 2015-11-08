@@ -36,7 +36,8 @@
 
 					return '<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>';
 				})
-				->on('/http','ControllerIndex::http');
+				->on('/http','ControllerIndex::http')
+				->on('/upload','ControllerIndex::upload');
 		}
 	}
 ?>

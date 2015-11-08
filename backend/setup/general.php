@@ -1,7 +1,7 @@
 <?php
 	call_user_func(function(){
 		if('CLI' != $_SERVER['REQUEST_METHOD']){
-			set_error_handler('\olifant\kernel\ErrorHandler::handleError');
+			//set_error_handler('\olifant\kernel\ErrorHandler::handleError');
 		}
 
 		//switch(\olifant\constants\APP_DEV_MODE){

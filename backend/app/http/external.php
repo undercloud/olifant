@@ -6,12 +6,12 @@
 
 	class External
 	{
-		private $url         = null;
+		private $url         = '';
 		private $context     = array();
 		private $stream      = null;
-		private $protocol    = null;
+		private $protocol    = '';
 		private $status      = 0;
-		private $statusText  = null;
+		private $statusText  = '';
 		private $headers     = array();
 		private $body        = null;
 
@@ -91,6 +91,11 @@
 					}
 
 					$options['content'] .= "Content-Disposition: form-data; name=\"{$file['name']}\"; filename=\"" . basename($file['path']) . "\"\n";
+					
+					if(isset($file['type'])){
+						$options['content'] .= "Content-Type: {$file['type']}\n";
+					}
+
 					$options['content'] .= "Content-Transfer-Encoding: binary\n\n";
 					$options['content'] .= file_get_contents($file['path'])."\n";
 					$options['content'] .= "--{$boundary}\n";

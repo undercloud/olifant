@@ -2,6 +2,7 @@
 	namespace olifant\http;
 
 	use olifant\http\CookieWriter;
+	use olifant\exceptions\AppException;
 
 	class ResponseBuilder
 	{
@@ -20,6 +21,9 @@
 				case 'file':
 				case 'refresh':
 					return ($this->{$key} = new \stdClass);
+
+				default:
+					throw new AppException('Undefined property: ' . __CLASS__ . '::' . $key);
 			}
 		}
 	}

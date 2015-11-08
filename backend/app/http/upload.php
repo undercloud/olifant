@@ -1,124 +1,150 @@
-<?php
+<?php	
 	namespace olifant\http;
 
-	use olifant\http\RequestBuilder;
+	use olifant\exceptions\AppException;
 
 	class Upload
 	{
-		private $options = array();
-		private $files   = array();
-		private $filter  = array();
+		private $file     = array();
+		private $mount    = null;
+		private $mode     = 0777;
+		private $nest     = 0;
+		private $node     = 0;
+		private $size     = 0;
+		private $filter   = array();
+		private $exfilter = array();
+		private $random   = 12;
 
-		/*
-			mount
-			mode
+		public static $errors = array(
+			UPLOAD_ERR_OK         => 'There is no error, the file uploaded with success',
+			UPLOAD_ERR_INI_SIZE   => 'The uploaded file exceeds the upload_max_filesize directive in php.ini',
+			UPLOAD_ERR_FORM_SIZE  => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form',
+			UPLOAD_ERR_PARTIAL    => 'The uploaded file was only partially uploaded',
+			UPLOAD_ERR_NO_FILE    => 'No file was uploaded',
+			UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder',
+			UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
+			UPLOAD_ERR_EXTENSION  => 'A PHP extension stopped the file upload.'
+		);
 
-			nest
-			node
-			name
-
-		*/
-
-		public function __construct(RequestBuilder $req)
+		public function __construct(array $file)
 		{
-			$this->files = $req->files;
+			$file['ext'] = strtolower(pathinfo($file['name'],PATHINFO_EXTENSION));
+
+			$this->file = $file;
 		}
 
-		public function setFilter(array $filter = array())
+		public function mount($mount)
 		{
-			$this->filter = $filter;
+			$this->mount = rtrim($mount,' \\/');
+
 			return $this;
 		}
 
-		private function createPath()
+		public function mode($mode)
 		{
-			$hash = md5(uniqid(time(),true));
+			$this->mode = $mode;
 
-			$dir_len  = $this->options['node'];
-			$dir_nest = $this->options['nest'];
+			return $this;
+		}
+
+		public function size($size)
+		{
+			$this->size = $size;
+
+			return $this;
+		}
+
+		public function filter(array $filter = array())
+		{
+			$this->filter = $filter;
+
+			return $this;
+		}
+
+		public function excludeFilter(array $exfilter = array())
+		{
+			$this->exfilter = $exfilter;
+
+			return $this;
+		}
+
+		public function subPath($node,$nest)
+		{
+			$this->node = $node;
+			$this->nest = $nest;
+
+			return $this;
+		}
+
+		public function move($name = null)
+		{
+			if(null == $this->mount)
+				throw new AppException('Mount folder is not defined', 1001);
 			
-			$path_size = $dir_len * $dir_nest;
+			if(UPLOAD_ERR_OK != $this->file['error'])
+				throw new AppException(
+					self::$errors[(int)$this->file['error']],
+					(int)$this->file['error']
+				);
 
-			if(0 === $path_size)
-				return array();
+			if(false == is_uploaded_file($this->file['tmp_name']))
+				throw new AppException('File upload is not by HTTP request', 1002);
 
-			$path = substr($hash,0,$path_size);	
-			$path = str_split($path,$dir_len);
+			if($this->size and $this->size < (int)$this->file['size'])
+				throw new AppException('The uploaded file exceeds the ' . $this->size . ' bytes', 1003);
 
-			return $path;
-		}
+			if(
+				($this->filter   and false == in_array($this->file['ext'],$this->filter)) or
+				($this->exfilter and true  == in_array($this->file['ext'],$this->exfilter))
+			)
+				throw new AppException('File extension ' . $this->file['ext'] . ' disabled', 1004);
 
-		private function resolvePath(array $path)
-		{
-			array_unshift(
-				$path,
-				$this->options['mount']
-			);
+			$subpath = false;
+			if($this->node and $this->nest){
+				$hash = md5(uniqid(time(),true));
+				
+				$path_size = $this->node * $this->nest;
 
-			$path = implode(DIRECTORY_SEPARATOR,$path);
-			if(file_exists($path)){
-				return true;
-			}
+				$path = substr($hash,0,$path_size);	
+				$path = str_split($path,$this->node);
 
-			return mkdir(
-				$path,
-				$this->options['mode'],
-				true
-			);
-		}
+				$subpath = implode(DIRECTORY_SEPARATOR,$path);
+				
+				array_unshift($path,$this->mount);
 
-		public function handle($call)
-		{
-			foreach($this->files as $file){
-				$status = array();
-				if(is_uploaded_file($file['tmp_name'])){
-					if($file['error'] == UPLOAD_ERR_OK){
-						$path = $this->createPath();
-						if($this->resolvePath($path)){
-							$ext = strtolower(pathinfo($file['name'],PATHINFO_EXTENSION));
-
-							if(0 == count($this->filter) or in_array($ext,$this->name)){
-								$dest = $this->options['mount'] . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR,$path) . DIRECTORY_SEPARATOR;
-								$dest .= olifant\fn\random($this->options['name']);
-								
-								if($ext){
-									$dest .= '.' . $ext;
-								}
-									
-								if(move_uploaded_file($file['tmp_name'],$dest)){
-									$call($status);
-								
-								}
-						}
+				$path = implode(DIRECTORY_SEPARATOR,$path);
+				
+				if(false == file_exists($path)){
+					if(false == @mkdir($path,$this->mode,true)){
+						throw new AppException('Can\'t create path ' . $path, 1005);	
 					}
 				}
 			}
+
+			if(null === $name)
+				$name = \olifant\fn\random($this->random) . '.' . $this->file['ext'];
+
+			$fullpath = (
+				$this->mount .
+				(
+					(false !== $subpath)
+					? (DIRECTORY_SEPARATOR . $subpath)
+					: ''
+				) .
+				(DIRECTORY_SEPARATOR . $name)
+			);
+			
+			if(false == move_uploaded_file($this->file['tmp_name'], $fullpath))
+				throw new AppException('Can\'t move uploaded file from ' . $this->file['tmp_name'] . ' to ' . $fullpath, 1006);
+			
+			return array(
+				'fullpath'  => $fullpath,
+				'subpath'   => (false !== $subpath ? (DIRECTORY_SEPARATOR . $subpath) : false),
+				'name'      => $name,
+				'extension' => $this->file['ext'], 
+				'size'      => $this->file['size'],
+				'mime'      => $this->file['type']
+			);
 		}
-	}
-?>
-
-<?php
-	if($_SERVER['REQUEST_METHOD'] == 'POST'){
-		$storage = new Storage(array(
-			'mount' => __DIR__ . DIRECTORY_SEPARATOR . 'hold',
-			'mode' => '0777',
-			'nest' => 0,
-			'node' => 0,
-			'name' => 12
-		));
-
-		$storage->setQueue($reorder['myfile']);
-		$storage->handle(function($item){
-			var_dump($item);
-		});
-	}else if($_SERVER['REQUEST_METHOD'] == 'GET'){
-		?>
-
-		<form method="post" target="<?= $_SERVER['PHP_SELF'] ?>" enctype="multipart/form-data">
-			<input type="file" name="myfile"/>
-			<button type="submit">Upload</button>
-		</form>
-
-		<?php
 	}
 ?>
